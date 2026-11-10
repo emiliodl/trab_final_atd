@@ -1,0 +1,46 @@
+{
+  "n_janelas": 6291,
+  "descritores": [
+    "h1_n",
+    "h1_pers_max",
+    "h1_pers_total",
+    "h1_pers_media",
+    "h1_entropia",
+    "h1_dominancia",
+    "h1_pers_2a",
+    "h1_nasc_max",
+    "h1_morte_max",
+    "h1_pais1_l1",
+    "h1_pais1_l2",
+    "h1_pais2_l1",
+    "h1_pais2_l2",
+    "h1_pais3_l1",
+    "h1_pais3_l2"
+  ],
+  "dbscan": {
+    "eps": 1.4116650229269334,
+    "min_samples": 5
+  },
+  "mapper_A": {
+    "lente": "PCA 2D dos descritores topologicos",
+    "variancia_explicada": [
+      0.4823,
+      0.2713
+    ],
+    "n_cubos": 12,
+    "sobreposicao": 0.4,
+    "nos": 63,
+    "arestas": 178,
+    "componentes": 4,
+    "janelas_cobertas": 5916
+  },
+  "mapper_B": {
+    "lente": "tempo relativo ao inicio da crise (s)",
+    "n_janelas": 1415,
+    "n_cubos": 24,
+    "sobreposicao": 0.35,
+    "nos": 28,
+    "arestas": 25,
+    "componentes": 3
+  }
+}

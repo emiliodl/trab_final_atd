@@ -1,0 +1,5 @@
+sinal,h1_n,h1_pers_max,h1_pers_total,h1_entropia,h1_dominancia
+Senoide 3 Hz,5,2.2536,2.2536,0.0,1.0
+Senoide 3 Hz + ruído (SNR 0 dB),52,0.2945,5.5127,3.5725,0.0534
+Espícula-onda sintética 3 Hz,4,0.7478,1.2999,1.1062,0.5753
+Ruído 1-30 Hz,42,0.426,5.0334,3.3983,0.0846

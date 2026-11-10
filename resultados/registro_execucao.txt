@@ -1,0 +1,311 @@
+
+=== 01_validacao_sintetica.py (34 s) ===
+  figura: 01_validacao_sintetica.png
+                          sinal  h1_n  h1_pers_max  h1_pers_total  h1_entropia  h1_dominancia
+                   Senoide 3 Hz     5        2.254          2.254        0.000          1.000
+Senoide 3 Hz + ruído (SNR 0 dB)    52        0.294          5.513        3.572          0.053
+   Espícula-onda sintética 3 Hz     4        0.748          1.300        1.106          0.575
+                  Ruído 1-30 Hz    42        0.426          5.033        3.398          0.085
+  figura: 01_persistencia_vs_ruido.png
+
+=== 02_parametros_takens.py (6 s) ===
+{
+  "canal": "FP1-F7",
+  "fs": 64.0,
+  "n_trechos_interictais": 30,
+  "trecho_s": 60.0,
+  "atraso_acf_1e_mediana": 5,
+  "atraso_acf_zero_mediana": 8,
+  "atraso_ami_mediana": 7,
+  "trechos_sem_minimo_ami": 0,
+  "atraso_sugerido": 7,
+  "atraso_sugerido_ms": 109.375,
+  "limiar_fnn": 0.1,
+  "fnn_mediana_por_dim": {
+    "1": 0.9851291416644926,
+    "2": 0.6496340825927862,
+    "3": 0.21681068342498036,
+    "4": 0.0877492130115425,
+    "5": 0.07056504599211563,
+    "6": 0.06964191679831491,
+    "7": 0.0713532049591137,
+    "8": 0.07848837209302326
+  },
+  "dim_sugerida": 4,
+  "enunciado": {
+    "dim": 3,
+    "atraso": 4
+  }
+}
+  figura: 02_parametros_takens.png
+
+=== 03_extrair_descritores.py (230 s) ===
+Gravações: chb01_01, chb01_02, chb01_03, chb01_04, chb01_05, chb01_06, chb01_09
+  crise em chb01_03: 2996-3036 s
+  crise em chb01_04: 1467-1494 s
+
+[1] Configuração do enunciado (d=3, tau=4, janela 8 s, passo 4 s)
+  chb01_01 [FP1-F7] 899 janelas
+  chb01_02 [FP1-F7] 899 janelas
+  chb01_03 [FP1-F7] 899 janelas
+  chb01_04 [FP1-F7] 899 janelas
+  chb01_05 [FP1-F7] 899 janelas
+  chb01_06 [FP1-F7] 899 janelas
+  chb01_09 [FP1-F7] 899 janelas
+classe
+interictal    5676
+pre-ictal      300
+pos-ictal      297
+ictal           18
+transicao        2
+  classes censuradas: 0 | 115 s
+
+[2] Recorte peri-ictal com passo de 1 s
+  chb01_03 [FP1-F7] 513 janelas
+  chb01_04 [FP1-F7] 500 janelas
+
+[3] Configuração orientada pelos dados (d=4, tau=7)
+  chb01_01 [FP1-F7] 899 janelas
+  chb01_02 [FP1-F7] 899 janelas
+  chb01_03 [FP1-F7] 899 janelas
+  chb01_04 [FP1-F7] 899 janelas
+  chb01_05 [FP1-F7] 899 janelas
+  chb01_06 [FP1-F7] 899 janelas
+  chb01_09 [FP1-F7] 899 janelas
+
+Tempo total: 227 s
+
+=== 04_analise_temporal.py (109 s) ===
+
+AUROC por descritor (0,5 = sem separação):
+          descritor  mediana_interictal  mediana_pre_ictal  mediana_ictal  auc_ictal_vs_inter  auc_ictal_vs_inter_mesma_grav  auc_pre_vs_inter  auc_pre_vs_inter_mesma_grav
+               h1_n              39.000             43.000         38.500               0.522                          0.378             0.674                        0.533
+        h1_pers_max               0.331              0.333          0.416               0.596                          0.597             0.519                        0.479
+      h1_pers_total               2.662              4.063          3.698               0.754                          0.486             0.783                        0.565
+      h1_pers_media               0.069              0.095          0.094               0.791                          0.576             0.770                        0.560
+        h1_entropia               3.243              3.398          3.271               0.585                          0.367             0.719                        0.549
+      h1_dominancia               0.108              0.083          0.096               0.389                          0.578             0.279                        0.422
+         h1_pers_2a               0.233              0.283          0.297               0.719                          0.619             0.664                        0.533
+        h1_nasc_max               1.039              0.837          0.803               0.386                          0.477             0.411                        0.501
+       h1_morte_max               1.387              1.177          1.213               0.415                          0.502             0.418                        0.493
+        h1_pais1_l1               0.051              0.077          0.090               0.742                          0.610             0.697                        0.537
+        h1_pais1_l2               0.064              0.087          0.095               0.740                          0.630             0.676                        0.526
+        h1_pais2_l1               0.014              0.035          0.038               0.816                          0.632             0.773                        0.560
+        h1_pais2_l2               0.024              0.048          0.053               0.814                          0.644             0.762                        0.552
+        h1_pais3_l1               0.006              0.020          0.023               0.802                          0.584             0.790                        0.564
+        h1_pais3_l2               0.012              0.032          0.034               0.790                          0.572             0.781                        0.555
+         bottleneck               0.183              0.156          0.156               0.435                          0.527             0.393                        0.469
+      log_variancia               7.874              6.356          9.052               0.843                          0.970             0.199                        0.363
+     log_comp_linha               9.169              8.680          9.638               0.816                          0.991             0.156                        0.366
+       log_potencia               9.488              8.252         11.044               0.838                          0.967             0.246                        0.382
+          rel_delta               0.697              0.602          0.831               0.747                          0.826             0.360                        0.451
+           rel_teta               0.157              0.189          0.117               0.384                          0.312             0.639                        0.533
+           rel_alfa               0.036              0.103          0.011               0.241                          0.100             0.785                        0.574
+           rel_beta               0.056              0.049          0.016               0.238                          0.316             0.461                        0.548
+ entropia_espectral               0.701              0.717          0.625               0.221                          0.239             0.536                        0.567
+          freq_pico               1.500              1.500          2.062               0.659                          0.663             0.493                        0.510
+  hjorth_mobilidade               0.528              0.592          0.393               0.259                          0.236             0.587                        0.554
+hjorth_complexidade               2.685              2.107          2.946               0.642                          0.843             0.281                        0.440
+          cruz_zero              15.781             12.900          9.331               0.092                          0.224             0.287                        0.527
+
+Teste por blocos (trecho ictal x blocos interictais de mesma duração):
+   crise  n_janelas_ictais     descritor  media_ictal  mediana_blocos_interictais  percentil  p_empirico  n_blocos
+chb01_03                11   h1_pers_max       0.3880                      0.3725    58.0057      0.8231      5596
+chb01_03                11 h1_pers_total       3.9128                      2.6564    81.7370      0.1830      5596
+chb01_03                11   h1_entropia       3.3151                      3.1705    70.4789      0.5626      5596
+chb01_03                11   h1_pais2_l1       0.0421                      0.0178    96.2116      0.0381      5596
+chb01_03                11    bottleneck       0.1777                      0.2128    28.8730      0.6178      5590
+chb01_03                11 log_variancia       9.0985                      7.8396    98.6419      0.1912      5596
+chb01_04                 7   h1_pers_max       0.3827                      0.3684    56.4321      0.8655      5628
+chb01_04                 7 h1_pers_total       3.8203                      2.6599    78.4826      0.2244      5628
+chb01_04                 7   h1_entropia       3.2590                      3.1824    60.7498      0.7822      5628
+chb01_04                 7   h1_pais2_l1       0.0393                      0.0178    90.6716      0.0934      5628
+chb01_04                 7    bottleneck       0.1739                      0.2055    31.4123      0.6856      5622
+chb01_04                 7 log_variancia       9.0284                      7.8349    95.5757      0.2444      5628
+
+Bottleneck nas transições:
+gravacao evento      t  dB_max  percentil_interictal
+chb01_03 inicio 2996.0   0.146                32.046
+chb01_03    fim 3036.0   0.271                74.480
+chb01_04 inicio 1467.0   0.176                47.143
+chb01_04    fim 1494.0   0.210                60.282
+  figura: 04_detalhe_chb01_03.png
+  figura: 04_detalhe_chb01_04.png
+  figura: 04_linha_do_tempo.png
+  figura: 04_exemplos_por_classe.png
+  figura: 04_distribuicoes_por_classe.png
+  figura: 04_paisagens_medias.png
+
+=== 05_classificacao.py (38 s) ===
+  Regressão logística  Topológico H1 (d=3, τ=4)           AUROC 0.789
+  Regressão logística  Topológico H1 (d, τ pelos dados)   AUROC 0.678
+  Regressão logística  Clássico: só forma                 AUROC 0.877
+  Regressão logística  Clássico: forma + amplitude        AUROC 0.988
+  Regressão logística  Topológico + clássico              AUROC 0.978
+  Floresta aleatória   Topológico H1 (d=3, τ=4)           AUROC 0.688
+  Floresta aleatória   Topológico H1 (d, τ pelos dados)   AUROC 0.725
+  Floresta aleatória   Clássico: só forma                 AUROC 0.803
+  Floresta aleatória   Clássico: forma + amplitude        AUROC 0.903
+  Floresta aleatória   Topológico + clássico              AUROC 0.984
+
+Janelas: 5994 (18 ictais, prevalência 0.0030)
+             modelo                      descritores  n_descritores  auroc  auprc  auroc_chb01_03  auroc_chb01_04  fa_h_1_crise  fa_h_2_crises
+Regressão logística         Topológico H1 (d=3, τ=4)             15  0.789  0.012           0.582           0.767         4.367         16.717
+Regressão logística Topológico H1 (d, τ pelos dados)             15  0.678  0.007           0.468           0.647         9.187         15.060
+Regressão logística               Clássico: só forma              9  0.877  0.078           0.709           0.927         0.000          3.614
+Regressão logística      Clássico: forma + amplitude             12  0.988  0.378           0.952           0.998         0.151          0.151
+Regressão logística            Topológico + clássico             27  0.978  0.412           0.917           0.998         0.000          0.151
+ Floresta aleatória         Topológico H1 (d=3, τ=4)             15  0.688  0.010           0.527           0.745         2.560         58.886
+ Floresta aleatória Topológico H1 (d, τ pelos dados)             15  0.725  0.006           0.548           0.658        26.958         88.855
+ Floresta aleatória               Clássico: só forma              9  0.803  0.051           0.584           0.879         0.151          2.410
+ Floresta aleatória      Clássico: forma + amplitude             12  0.903  0.056           0.854           0.998         1.807          4.217
+ Floresta aleatória            Topológico + clássico             27  0.984  0.546           0.874           1.000         0.000          0.000
+  figura: 05_classificacao_deteccao.png
+  figura: 05_escores_em_torno_das_crises.png
+
+=== 06_previsao.py (5 s) ===
+Horas interictais: 6.31 | crises: 2
+                                   0                            1                      2
+descritores            Topológico H1  Clássico: forma + amplitude  Topológico + clássico
+auroc_janelas                  0.797                        0.811                  0.802
+auroc_dentro_chb01_03           0.56                        0.212                  0.187
+auroc_dentro_chb01_04          0.581                        0.511                  0.526
+fa_h_min_1_crise(s)            0.634                        0.476                  0.476
+acaso_prob_1_crise(s)          0.191                        0.147                  0.147
+fa_h_min_2_crise(s)            0.634                        1.268                  1.268
+acaso_prob_2_crise(s)           0.01                        0.036                  0.036
+  figura: 06_previsao_escores.png
+  figura: 06_previsao_alarmes.png
+
+=== 07_mapper.py (6 s) ===
+  figura: 07_mapper_A.png
+  figura: 07_mapper_B.png
+{
+  "n_janelas": 6291,
+  "dbscan": {
+    "eps": 1.4116650229269334,
+    "min_samples": 5
+  },
+  "mapper_A": {
+    "lente": "PCA 2D dos descritores topologicos",
+    "variancia_explicada": [
+      0.4823,
+      0.2713
+    ],
+    "n_cubos": 12,
+    "sobreposicao": 0.4,
+    "nos": 63,
+    "arestas": 178,
+    "componentes": 4,
+    "janelas_cobertas": 5916
+  },
+  "mapper_B": {
+    "lente": "tempo relativo ao inicio da crise (s)",
+    "n_janelas": 1415,
+    "n_cubos": 24,
+    "sobreposicao": 0.35,
+    "nos": 28,
+    "arestas": 25,
+    "componentes": 3
+  }
+}
+                 n_janelas  frac_ictal  frac_pre-ictal  frac_pos-ictal  pers_max_media             gravacoes
+no                                                                                                          
+cube78_cluster0         82       0.024           0.110           0.098           0.506  01,02,03,04,05,06,09
+cube56_cluster0         81       0.012           0.086           0.099           0.522  01,02,03,04,05,06,09
+cube67_cluster0         98       0.010           0.143           0.051           0.503  01,02,03,04,05,06,09
+cube55_cluster0        614       0.010           0.094           0.078           0.398  01,02,03,04,05,06,09
+cube66_cluster0        759       0.009           0.112           0.092           0.404  01,02,03,04,05,06,09
+
+=== 08_sensibilidade.py (134 s) ===
+GUDHI x Ripser: {'n_janelas': 60, 'equivalente': True, 'maior_diferenca': 2.7241823108425933e-07}
+  d=2 tau= 2 | 7 s
+  d=2 tau= 4 | 9 s
+  d=2 tau= 7 | 12 s
+  d=2 tau=10 | 15 s
+  d=2 tau=14 | 18 s
+  d=3 tau= 2 | 20 s
+  d=3 tau= 4 | 23 s
+  d=3 tau= 7 | 26 s
+  d=3 tau=10 | 29 s
+  d=3 tau=14 | 31 s
+  d=4 tau= 2 | 34 s
+  d=4 tau= 4 | 37 s
+  d=4 tau= 7 | 40 s
+  d=4 tau=10 | 42 s
+  d=4 tau=14 | 45 s
+  d=5 tau= 2 | 48 s
+  d=5 tau= 4 | 51 s
+  d=5 tau= 7 | 54 s
+  d=5 tau=10 | 56 s
+  d=5 tau=14 | 59 s
+  canal FP1-F7 | 62 s
+  canal F7-T7 | 65 s
+  canal T7-P7 | 68 s
+  canal P7-O1 | 71 s
+  canal FP1-F3 | 74 s
+  canal F3-C3 | 77 s
+  canal C3-P3 | 80 s
+  canal P3-O1 | 83 s
+  canal FP2-F4 | 86 s
+  canal F4-C4 | 89 s
+  canal C4-P4 | 92 s
+  canal P4-O2 | 95 s
+  canal FP2-F8 | 98 s
+  canal F8-T8 | 101 s
+  canal T8-P8-0 | 104 s
+  canal P8-O2 | 107 s
+  canal FZ-CZ | 110 s
+  canal CZ-PZ | 113 s
+  canal T7-FT9 | 116 s
+  canal FT9-FT10 | 119 s
+  canal FT10-T8 | 122 s
+  figura: 08_sensibilidade_d_tau.png
+  figura: 08_sensibilidade_canais.png
+ dim  atraso  n_pontos  h1_pers_max__todas  h1_pers_max__mesma_grav  h1_pers_total__todas  h1_pers_total__mesma_grav  h1_entropia__todas  h1_entropia__mesma_grav  h1_pais2_l1__todas  h1_pais2_l1__mesma_grav
+   2       2       128               0.514                    0.400                 0.627                      0.335               0.582                    0.435               0.675                    0.378
+   2       4       127               0.486                    0.476                 0.722                      0.499               0.744                    0.591               0.729                    0.455
+   2       7       127               0.648                    0.593                 0.850                      0.692               0.723                    0.589               0.870                    0.732
+   2      10       126               0.722                    0.614                 0.807                      0.561               0.704                    0.560               0.793                    0.561
+   2      14       125               0.607                    0.463                 0.820                      0.591               0.703                    0.564               0.797                    0.550
+   3       2       127               0.513                    0.495                 0.569                      0.281               0.415                    0.219               0.678                    0.409
+   3       4       126               0.596                    0.597                 0.754                      0.486               0.585                    0.367               0.816                    0.632
+   3       7       125               0.641                    0.593                 0.870                      0.685               0.761                    0.578               0.880                    0.729
+   3      10       123               0.712                    0.620                 0.816                      0.571               0.728                    0.520               0.810                    0.564
+   3      14       121               0.628                    0.522                 0.802                      0.550               0.699                    0.477               0.820                    0.609
+   4       2       127               0.520                    0.537                 0.599                      0.320               0.453                    0.255               0.708                    0.451
+   4       4       125               0.663                    0.671                 0.787                      0.552               0.625                    0.420               0.838                    0.668
+   4       7       123               0.693                    0.691                 0.872                      0.710               0.780                    0.610               0.854                    0.672
+   4      10       121               0.720                    0.649                 0.831                      0.591               0.746                    0.529               0.839                    0.626
+   4      14       118               0.688                    0.593                 0.817                      0.579               0.711                    0.501               0.837                    0.653
+   5       2       126               0.519                    0.537                 0.622                      0.361               0.447                    0.281               0.759                    0.535
+   5       4       124               0.635                    0.626                 0.789                      0.561               0.617                    0.421               0.864                    0.718
+   5       7       121               0.678                    0.684                 0.861                      0.680               0.739                    0.532               0.889                    0.750
+   5      10       118               0.714                    0.629                 0.804                      0.562               0.708                    0.464               0.817                    0.613
+   5      14       114               0.753                    0.695                 0.819                      0.600               0.687                    0.452               0.854                    0.689
+   canal  h1_pers_max__todas  h1_pers_max__mesma_grav  h1_pers_total__todas  h1_pers_total__mesma_grav  h1_entropia__todas  h1_entropia__mesma_grav  h1_pais2_l1__todas  h1_pais2_l1__mesma_grav  log_variancia__todas  log_variancia__mesma_grav
+  FP1-F7               0.596                    0.597                 0.754                      0.486               0.585                    0.367               0.816                    0.632                 0.843                      0.970
+   F7-T7               0.610                    0.627                 0.717                      0.576               0.590                    0.490               0.761                    0.636                 0.934                      0.952
+   T7-P7               0.406                    0.414                 0.418                      0.486               0.453                    0.504               0.400                    0.449                 0.965                      0.899
+   P7-O1               0.521                    0.517                 0.421                      0.463               0.416                    0.455               0.469                    0.512                 0.960                      0.885
+  FP1-F3               0.637                    0.648                 0.731                      0.508               0.568                    0.403               0.776                    0.584                 0.912                      0.973
+   F3-C3               0.519                    0.490                 0.556                      0.548               0.650                    0.671               0.559                    0.522                 0.988                      0.947
+   C3-P3               0.574                    0.587                 0.382                      0.463               0.419                    0.472               0.423                    0.485                 0.984                      0.946
+   P3-O1               0.447                    0.457                 0.267                      0.334               0.335                    0.392               0.336                    0.386                 0.983                      0.931
+  FP2-F4               0.551                    0.532                 0.742                      0.529               0.702                    0.547               0.742                    0.533                 0.964                      0.983
+   F4-C4               0.639                    0.625                 0.391                      0.403               0.335                    0.358               0.592                    0.588                 0.995                      0.978
+   C4-P4               0.640                    0.635                 0.282                      0.335               0.214                    0.246               0.511                    0.552                 0.995                      0.978
+   P4-O2               0.438                    0.454                 0.297                      0.330               0.304                    0.325               0.372                    0.402                 0.964                      0.962
+  FP2-F8               0.540                    0.500                 0.798                      0.607               0.728                    0.583               0.795                    0.611                 0.935                      0.978
+   F8-T8               0.616                    0.603                 0.610                      0.437               0.459                    0.387               0.738                    0.589                 0.976                      0.978
+ T8-P8-0               0.449                    0.468                 0.519                      0.590               0.391                    0.462               0.498                    0.550                 0.994                      0.977
+   P8-O2               0.503                    0.489                 0.342                      0.333               0.277                    0.292               0.553                    0.521                 0.967                      0.964
+   FZ-CZ               0.552                    0.577                 0.464                      0.529               0.447                    0.501               0.524                    0.558                 0.988                      0.946
+   CZ-PZ               0.579                    0.600                 0.297                      0.411               0.279                    0.344               0.401                    0.496                 0.987                      0.948
+  T7-FT9               0.478                    0.481                 0.657                      0.579               0.621                    0.561               0.715                    0.628                 0.930                      0.944
+FT9-FT10               0.581                    0.614                 0.741                      0.615               0.618                    0.502               0.803                    0.682                 0.970                      0.978
+ FT10-T8               0.663                    0.711                 0.590                      0.521               0.508                    0.445               0.633                    0.547                 0.977                      0.980
+
+=== 09_animacoes.py (70 s) ===
+  animacao_filtracao_rips.gif (98 quadros, 43 pontos, persistência do ciclo principal 1.10)
+  animacao_janela_deslizante.gif (112 quadros)

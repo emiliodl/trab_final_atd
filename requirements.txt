@@ -1,0 +1,14 @@
+# Ambiente usado (Python 3.11.9). Versões exatas de tudo: resultados/pip_freeze.txt
+numpy==2.4.4
+scipy==1.16.3
+pandas==2.3.3
+matplotlib==3.10.8
+requests==2.32.5
+gudhi==3.13.0
+mne==1.13.2
+scikit-learn==1.7.2
+joblib==1.5.3
+kmapper==2.1.0
+networkx==3.6.1
+ripser==0.6.15
+pillow

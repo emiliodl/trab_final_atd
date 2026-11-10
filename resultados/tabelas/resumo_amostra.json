@@ -1,0 +1,11 @@
+{
+  "n_janelas": {
+    "interictal": 5676,
+    "pre-ictal": 300,
+    "pos-ictal": 297,
+    "ictal": 18,
+    "transicao": 2
+  },
+  "n_censuradas": 0,
+  "pontos_por_nuvem": 126
+}

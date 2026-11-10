@@ -1,0 +1,11 @@
+modelo,descritores,n_descritores,auroc,auprc,auroc_chb01_03,auroc_chb01_04,fa_h_1_crise,fa_h_2_crises
+Regressão logística,"Topológico H1 (d=3, τ=4)",15,0.7887,0.012,0.5824,0.7675,4.3675,16.7169
+Regressão logística,"Topológico H1 (d, τ pelos dados)",15,0.678,0.0067,0.4675,0.6472,9.1867,15.0602
+Regressão logística,Clássico: só forma,9,0.8771,0.0783,0.7094,0.9273,0.0,3.6145
+Regressão logística,Clássico: forma + amplitude,12,0.9882,0.3779,0.9521,0.9982,0.1506,0.1506
+Regressão logística,Topológico + clássico,27,0.9777,0.412,0.9169,0.9977,0.0,0.1506
+Floresta aleatória,"Topológico H1 (d=3, τ=4)",15,0.688,0.0102,0.5269,0.7448,2.5602,58.8855
+Floresta aleatória,"Topológico H1 (d, τ pelos dados)",15,0.7247,0.0062,0.5484,0.658,26.9578,88.8554
+Floresta aleatória,Clássico: só forma,9,0.8026,0.0506,0.5838,0.8794,0.1506,2.4096
+Floresta aleatória,Clássico: forma + amplitude,12,0.9028,0.0565,0.8537,0.9984,1.8072,4.2169
+Floresta aleatória,Topológico + clássico,27,0.9841,0.5458,0.8737,0.9998,0.0,0.0

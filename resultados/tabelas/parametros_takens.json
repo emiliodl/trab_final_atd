@@ -1,0 +1,28 @@
+{
+  "canal": "FP1-F7",
+  "fs": 64.0,
+  "n_trechos_interictais": 30,
+  "trecho_s": 60.0,
+  "atraso_acf_1e_mediana": 5,
+  "atraso_acf_zero_mediana": 8,
+  "atraso_ami_mediana": 7,
+  "trechos_sem_minimo_ami": 0,
+  "atraso_sugerido": 7,
+  "atraso_sugerido_ms": 109.375,
+  "limiar_fnn": 0.1,
+  "fnn_mediana_por_dim": {
+    "1": 0.9851291416644926,
+    "2": 0.6496340825927862,
+    "3": 0.21681068342498036,
+    "4": 0.0877492130115425,
+    "5": 0.07056504599211563,
+    "6": 0.06964191679831491,
+    "7": 0.0713532049591137,
+    "8": 0.07848837209302326
+  },
+  "dim_sugerida": 4,
+  "enunciado": {
+    "dim": 3,
+    "atraso": 4
+  }
+}

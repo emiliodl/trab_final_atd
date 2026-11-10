@@ -1,0 +1,11 @@
+# Dados brutos do CHB-MIT (297 MB, públicos): baixe com scripts/00_baixar_dados.py
+dataset/*.edf
+
+# Cache regenerável pelo script 03
+resultados/cache/
+
+__pycache__/
+*.pyc
+.venv/
+.vscode/
+.claude/

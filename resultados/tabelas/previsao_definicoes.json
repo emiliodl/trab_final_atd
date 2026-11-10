@@ -1,0 +1,12 @@
+{
+  "horizonte_pre_ictal_s": 600.0,
+  "sph_s": 0,
+  "exclusao_pos_ictal_s": 600.0,
+  "refratario_s": 600.0,
+  "suavizacao_janelas": 15,
+  "horas_interictais": 6.306666666666667,
+  "n_crises": 2,
+  "janelas_pre_ictais": 300,
+  "janelas_interictais": 5676,
+  "validacao": "deixa-uma-gravacao-fora, regressao logistica com hiperparametros fixos"
+}

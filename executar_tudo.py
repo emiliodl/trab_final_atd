@@ -1,7 +1,7 @@
 """Executa o projeto inteiro, na ordem. Uso: python executar_tudo.py
 
 Tempo aproximado em uma máquina de 32 núcleos: 50 a 60 minutos (as extrações com o
-GUDHI, scripts 03 e 10, são as etapas mais demoradas). As etapas 10-14 (multipaciente)
+GUDHI, scripts 03 e 10, são as etapas mais demoradas). As etapas 10-15 (multipaciente)
 precisam de todos os EDF; use --so-chb01 para rodar só o estudo de caso (scripts 01-09).
 """
 import subprocess
@@ -27,6 +27,7 @@ ETAPAS_MULTI = [
     "12_avaliacao_supervisionada.py",
     "13_figuras_didaticas.py",
     "14_multicanal.py",
+    "15_ml_por_que_falha.py",
 ]
 
 

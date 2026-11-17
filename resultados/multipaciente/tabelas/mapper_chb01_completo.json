@@ -1,0 +1,13 @@
+{
+ "janelas":36446.0,
+ "nos":110.0,
+ "arestas":246.0,
+ "componentes":14.0,
+ "janelas_ictais":114.0,
+ "ictais_cobertas":113.0,
+ "max_frac_ictal_no":0.0769230769,
+ "nos_com_ictal":21.0,
+ "nos_maioria_estado":40.0,
+ "ictais_em_nos_do_estado":110.0,
+ "frac_janelas_no_estado":0.4624650167
+}

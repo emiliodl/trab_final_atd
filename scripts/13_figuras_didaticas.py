@@ -6,24 +6,33 @@
   D4_todas_as_crises.png        cada crise em uma linha: H1 x amplitude
   D5_crises_detectadas.png      cada crise é uma bolinha: detectada ou não
   D6_linha_do_tempo_chb01.png   as 40 h do chb01: o "estado lento" e as 7 crises
+  D7_ml_como_foi_feito.png      tópico de ML: da janela ao alarme e como o modelo é testado
+  D8_mapper_como_funciona.png   tópico Mapper: lente, cobertura, agrupamento e grafo
+  D9_mapper_chb01.png           o Mapper nas 40 h do chb01: o grafo segue o estado, não a crise
 
 D1 a D3 usam sinais sintéticos e o estudo de caso (chb01, 7 gravações). D4 a D6 leem as
 tabelas dos scripts 11 e 12 (todas as gravações dos três pacientes).
 Saída em resultados/didaticas/.
 """
 import _caminho  # noqa: F401
+import importlib
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.patches import Circle, Polygon
+import networkx as nx
+from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Polygon, Rectangle
+from sklearn.decomposition import PCA
 from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import StandardScaler
 
 from tda_eeg import config as cfg
 from tda_eeg import dados, estilo, extracao
 from tda_eeg.takens import imersao_takens
-from tda_eeg.topologia import h1_rips
+from tda_eeg.topologia import COLUNAS_TOPO, descritores_h1, h1_rips
+
+m07 = importlib.import_module("07_mapper")          # funções do Mapper do estudo de caso
 
 DIR = cfg.DIR_RES / "didaticas"
 TAB = cfg.DIR_MULTI / "tabelas"
@@ -475,11 +484,246 @@ def d6_linha_do_tempo_chb01():
     print("  estado lento:", {k: round(v, 5) for k, v in resumo.items()})
 
 
+# ---------------------------------------------------------------------------
+# D7: o tópico de Machine Learning em um esquema
+# ---------------------------------------------------------------------------
+
+def caixa(ax, x, y, w, h, titulo, texto="", cor=None, fs=13):
+    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.12", facecolor=cor or "#f0efec",
+                                edgecolor=EIXO, linewidth=1.2, zorder=1))
+    ax.text(x + w / 2, y + h - 0.16, titulo, ha="center", va="top", fontsize=fs + 1.5, fontweight="bold", color=TINTA,
+            zorder=3)
+    if texto:
+        ax.text(x + w / 2, y + 0.14, texto, ha="center", va="bottom", fontsize=fs, color=TINTA, zorder=3,
+                linespacing=1.3)
+
+
+def seta(ax, x0, x1, y):
+    ax.add_patch(FancyArrowPatch((x0, y), (x1, y), arrowstyle="-|>", mutation_scale=22, color=TINTA_2, lw=2, zorder=2))
+
+
+def d7_ml():
+    fs = cfg.FS
+    g = next(g for g in dados.listar_gravacoes() if g.nome == "chb01_03")
+    x, _ = dados.carregar_canal(g.caminho)
+    seg = x[int(3024 * fs): int(3024 * fs) + int(cfg.JANELA_S * fs)]
+    h1 = h1_rips(imersao_takens(seg, cfg.DIM, cfg.ATRASO, cfg.PASSO_NUVEM))[0]
+    d = descritores_h1(h1)
+
+    det = pd.read_csv(TAB / "deteccao_por_crise.csv")
+    det = det[(det.esquema == "entre pacientes") & np.isclose(det.fpr_treino, 0.01)]
+    n_cr = det.crise.nunique()
+    pacs = list(dict.fromkeys(det.crise.str[:5]))
+
+    fig, ax = plt.subplots(figsize=TAM, constrained_layout=True)
+    ax.set_xlim(0, 16)
+    ax.set_ylim(0, 6.8)
+    ax.axis("off")
+
+    # --- linha de cima: da janela ao alarme
+    ax.text(0.15, 6.62, "1  Da janela ao alarme", fontsize=17, fontweight="bold", color=TINTA, va="top")
+    yb, hb = 3.75, 2.25
+    caixa(ax, 0.15, yb, 2.9, hb, "Janela de 8 s de EEG")
+    eixo = ax.inset_axes([0.33, yb + 0.25, 2.55, 1.35], transform=ax.transData)
+    eixo.plot(np.arange(len(seg)) / fs, (seg - seg.mean()) / seg.std(), color=LARANJA, lw=1.1)
+    eixo.axis("off")
+    seta(ax, 3.12, 3.55, yb + hb / 2)
+    caixa(ax, 3.6, yb, 2.75, hb, "Takens → Rips → $H_1$")
+    eixo = ax.inset_axes([4.3, yb + 0.22, 1.4, 1.4], transform=ax.transData)
+    eixo.plot([0, 2.6], [0, 2.6], color=EIXO, lw=1)
+    eixo.scatter(h1[:, 0], h1[:, 1], s=9, color=LARANJA)
+    eixo.set_xlim(0, 2.6)
+    eixo.set_ylim(0, 2.6)
+    eixo.set_xticks([])
+    eixo.set_yticks([])
+    eixo.grid(False)
+    seta(ax, 6.42, 6.85, yb + hb / 2)
+    numeros = (f"persistência máx.  {d['h1_pers_max']:.2f}\npersistência total  {d['h1_pers_total']:.2f}\n"
+               f"nº de barras  {d['h1_n']}\nentropia  {d['h1_entropia']:.2f}\npaisagens λ1, λ2, λ3 …").replace(".", ",")
+    caixa(ax, 6.9, yb, 3.0, hb, "15 números da janela", numeros, cor="#e6effb", fs=12.5)
+    seta(ax, 9.97, 10.4, yb + hb / 2)
+    caixa(ax, 10.45, yb, 2.55, hb, "Classificador", "regressão logística\nhiperparâmetros fixos\n(sem ajuste no teste)", fs=12.5)
+    seta(ax, 13.07, 13.5, yb + hb / 2)
+    caixa(ax, 13.55, yb, 2.3, hb, "Escore de crise", "de 0 a 1\nacima do limiar:\nalarme", cor="#fbe3d8", fs=12.5)
+
+    # --- linha de baixo, à esquerda: como o modelo é testado
+    ax.text(0.15, 3.35, "2  Como o modelo é testado: em um paciente que ele nunca viu", fontsize=17, fontweight="bold",
+            color=TINTA, va="top")
+    larg, y0 = 1.05, 1.55
+    for k, q in enumerate(pacs):
+        teste = k == len(pacs) - 1
+        ax.add_patch(FancyBboxPatch((0.25 + k * (larg + 0.12), y0), larg, 0.95, boxstyle="round,pad=0.02,rounding_size=0.1",
+                                    facecolor=LARANJA if teste else AZUL, alpha=0.9 if teste else 0.55, edgecolor="none"))
+        ax.text(0.25 + k * (larg + 0.12) + larg / 2, y0 + 0.62, q, ha="center", va="center", fontsize=13,
+                fontweight="bold", color="white")
+        ax.text(0.25 + k * (larg + 0.12) + larg / 2, y0 + 0.28, "teste" if teste else "treino", ha="center", va="center",
+                fontsize=12, color="white")
+    fim = 0.25 + len(pacs) * (larg + 0.12)
+    ax.text(0.25, y0 - 0.2, f"Treina em {len(pacs) - 1} pacientes, testa no que ficou de fora, e repete até todos terem sido o teste.\n"
+            "O limiar do alarme é escolhido só com os dados de treino.", fontsize=13, color=TINTA, va="top", linespacing=1.35)
+
+    # --- linha de baixo, à direita: o que se mede e com o que se compara
+    xd = max(fim + 0.5, 9.0)
+    caixa(ax, xd, 0.25, 3.25, 2.25, "O que se mede", "por crise: detectada ou não,\ne com quanto atraso\n"
+          "por hora: alarmes falsos\npor janela: AUROC e AUPRC", fs=12.5)
+    caixa(ax, xd + 3.45, 0.25, 16 - 0.15 - (xd + 3.45), 2.25, "Com o que se compara", "12 descritores clássicos,\n"
+          "sem topologia: amplitude,\npotência por banda,\nHjorth, cruzamentos por zero", fs=12.5)
+    fig.suptitle(f"Tópico de Machine Learning: os descritores de $H_1$ como entrada de um classificador "
+                 f"({len(pacs)} pacientes, {n_cr} crises)")
+    estilo.salvar(fig, DIR / "D7_ml_como_foi_feito.png")
+
+
+# ---------------------------------------------------------------------------
+# D8 e D9: o tópico Mapper
+# ---------------------------------------------------------------------------
+
+def rodar_mapper(df):
+    """Mapper com os parâmetros do script 07: lente PCA 2D dos 15 descritores, 12 x 12 quadrados, 40 % de sobreposição."""
+    df = df[df.classe != "transicao"].reset_index(drop=True)
+    X = StandardScaler().fit_transform(df[COLUNAS_TOPO].to_numpy(float))
+    lente = PCA(n_components=2, random_state=cfg.SEMENTE).fit_transform(X)
+    mapper, grafo = m07.construir(lente, X, n_cubos=12, sobreposicao=0.4, eps=m07.eps_heuristico(X))
+    G = m07.para_networkx(grafo)
+    pos = {n: lente[d["membros"]].mean(0) for n, d in G.nodes(data=True)}       # nó no centro das suas janelas
+    return df, lente, mapper, G, pos
+
+
+def desenhar_grafo(ax, G, pos, cor, tam_min=25, escala=7, **kw):
+    nx.draw_networkx_edges(G, pos, ax=ax, edge_color=EIXO, width=0.9)
+    tam = np.array([len(G.nodes[n]["membros"]) for n in G])
+    return ax.scatter([pos[n][0] for n in G], [pos[n][1] for n in G], c=cor, s=tam_min + escala * np.sqrt(tam),
+                      edgecolor=TINTA_2, linewidths=0.5, zorder=3, **kw)
+
+
+def d8_mapper_como_funciona():
+    df = extracao.carregar(extracao.rotulo_config())                   # estudo de caso: 7 gravações do chb01
+    df, lente, mapper, G, pos = rodar_mapper(df)
+    cov = mapper.cover
+    centros, raio = np.asarray(cov.centers_), np.asarray(cov.radius_)
+    # o quadrado do exemplo: um que se divide em dois grupos, com o menor deles o maior possível
+    por_cubo = {}
+    for n in G:
+        por_cubo.setdefault(n.split("_")[0], []).append(n)
+    dois = [c for c in por_cubo if len(por_cubo[c]) == 2] or list(por_cubo)
+    cubo = max(dois, key=lambda c: min(len(G.nodes[n]["membros"]) for n in por_cubo[c]))
+    nos_cubo = sorted(por_cubo[cubo])
+    membros = np.concatenate([G.nodes[n]["membros"] for n in nos_cubo])
+    dentro = np.all(np.abs(lente[membros][None] - centros[:, None]) <= raio + 1e-9, axis=2).all(axis=1)
+    c0 = centros[dentro][np.argmin(np.linalg.norm(centros[dentro] - lente[membros].mean(0), axis=1))]
+    no_quadrado = np.all(np.abs(lente - c0) <= raio, axis=1)
+    cores_grupo = [AZUL, AGUA, VIOLETA, LARANJA]
+
+    lim_x = (np.percentile(lente[:, 0], 0.3) - 0.5, np.percentile(lente[:, 0], 99.7) + 0.5)
+    lim_y = (np.percentile(lente[:, 1], 0.3) - 0.5, np.percentile(lente[:, 1], 99.7) + 0.5)
+    fig, eixos = plt.subplots(1, 3, figsize=TAM, constrained_layout=True)
+
+    ax = eixos[0]
+    ax.scatter(lente[:, 0], lente[:, 1], s=4, color=MUDO, alpha=0.35, lw=0)
+    for c in centros:                                                    # a cobertura: quadrados que se sobrepõem
+        ax.add_patch(Rectangle(c - raio, 2 * raio[0], 2 * raio[1], fill=False, edgecolor=GRADE, lw=0.5, zorder=0))
+    viz = centros[np.argmin(np.linalg.norm(centros - (c0 + [2 * (raio[0] - cov.inset_[0] / 2), 0]), axis=1))]
+    ax.add_patch(Rectangle(viz - raio, 2 * raio[0], 2 * raio[1], fill=False, edgecolor=TINTA_2, lw=1.8, ls=(0, (4, 3))))
+    ax.add_patch(Rectangle(c0 - raio, 2 * raio[0], 2 * raio[1], fill=False, edgecolor=LARANJA, lw=2.6))
+    ax.annotate("um quadrado\n(ampliado no passo 2)", c0 + [-raio[0], raio[1]], xytext=(lim_x[0] + 0.3, lim_y[1] - 0.4),
+                ha="left", va="top", arrowprops=SETA, **NOTA)
+    ax.annotate("o vizinho se\nsobrepõe a ele", viz + [raio[0], -raio[1]], xytext=(lim_x[1] - 0.3, lim_y[0] + 0.4),
+                ha="right", va="bottom", arrowprops=SETA, **NOTA)
+    ax.set_xlim(*lim_x)
+    ax.set_ylim(*lim_y)
+    ax.set_xlabel("1ª componente principal dos 15 descritores")
+    ax.set_ylabel("2ª componente principal")
+    passo(ax, 1, "A lente e a cobertura")
+
+    ax = eixos[1]
+    ax.scatter(lente[no_quadrado, 0], lente[no_quadrado, 1], s=16, color=MUDO, alpha=0.6, lw=0)
+    for k, n in enumerate(nos_cubo):
+        m = G.nodes[n]["membros"]
+        ax.scatter(lente[m, 0], lente[m, 1], s=24, color=cores_grupo[k % 4], lw=0, zorder=3,
+                   label=f"grupo {k + 1}: {len(m)} janelas")
+    ax.add_patch(Rectangle(c0 - raio, 2 * raio[0], 2 * raio[1], fill=False, edgecolor=LARANJA, lw=2.6))
+    ax.set_xlim(c0[0] - 1.12 * raio[0], c0[0] + 1.12 * raio[0])
+    ax.set_ylim(c0[1] - 1.12 * raio[1], c0[1] + 1.75 * raio[1])
+    ax.legend(loc="upper left", fontsize=13.5, ncol=1, title="cada grupo vira um nó (cinza: janelas sem grupo)",
+              title_fontsize=13.5)
+    ax.set_xlabel("janelas agrupadas pelos 15 descritores (DBSCAN)")
+    ax.set_yticks([])
+    passo(ax, 2, "Agrupar dentro do quadrado")
+
+    ax = eixos[2]
+    cor = [cores_grupo[nos_cubo.index(n) % 4] if n in nos_cubo else "#cde2fb" for n in G]
+    desenhar_grafo(ax, G, pos, cor, tam_min=35, escala=8)
+    ax.set_xlim(*lim_x)
+    ax.set_ylim(*lim_y)
+    ax.set_xlabel("cada nó no centro das suas janelas")
+    ax.set_yticks([])
+    ax.grid(False)
+    ax.text(0.03, 0.97, "aresta = os dois grupos\ntêm janelas em comum", transform=ax.transAxes, ha="left", va="top", **NOTA)
+    passo(ax, 3, f"O grafo: {G.number_of_nodes()} nós")
+    fig.suptitle(f"Como o Mapper funciona: {len(df):,} janelas viram um grafo".replace(",", " "))
+    estilo.salvar(fig, DIR / "D8_mapper_como_funciona.png")
+    return {"janelas": len(df), "nos": G.number_of_nodes(), "arestas": G.number_of_edges()}
+
+
+def d9_mapper_chb01():
+    bruto = extracao.carregar(f"chb01_{extracao.rotulo_config()}")
+    gravs = dados.listar_gravacoes(pacientes=("chb01",), restringir=None)
+    bruto = estado_lento(bruto, gravs)                                  # acrescenta a coluna "estado"
+    df, lente, mapper, G, pos = rodar_mapper(bruto)
+    ictal = (df.classe == "ictal").to_numpy()
+    estado = df.estado.to_numpy(bool)
+    f_ict = np.array([ictal[G.nodes[n]["membros"]].mean() for n in G])
+    f_est = np.array([estado[G.nodes[n]["membros"]].mean() for n in G])
+    n_ict = np.array([ictal[G.nodes[n]["membros"]].sum() for n in G])
+    tam = np.array([len(G.nodes[n]["membros"]) for n in G])
+    # onde caem as janelas ictais: em nós dominados pelo estado?
+    cobertas = np.unique(np.concatenate([G.nodes[n]["membros"] for n in G]))
+    nos_estado = {n for n, f in zip(G, f_est) if f > 0.5}
+    ict_em_estado = np.unique(np.concatenate([G.nodes[n]["membros"][ictal[G.nodes[n]["membros"]]] for n in nos_estado]
+                                             or [np.array([], int)]))
+    resumo = {"janelas": len(df), "nos": G.number_of_nodes(), "arestas": G.number_of_edges(),
+              "componentes": nx.number_connected_components(G), "janelas_ictais": int(ictal.sum()),
+              "ictais_cobertas": int(ictal[cobertas].sum()), "max_frac_ictal_no": float(f_ict.max()),
+              "nos_com_ictal": int((n_ict > 0).sum()), "nos_maioria_estado": len(nos_estado),
+              "ictais_em_nos_do_estado": int(len(ict_em_estado)),
+              "frac_janelas_no_estado": float(estado.mean())}
+    pd.Series(resumo).to_json(TAB / "mapper_chb01_completo.json", indent=1)
+
+    fig, eixos = plt.subplots(1, 2, figsize=TAM, constrained_layout=True)
+    lim_x = (np.percentile(lente[:, 0], 0.3) - 0.5, np.percentile(lente[:, 0], 99.7) + 0.5)
+    lim_y = (np.percentile(lente[:, 1], 0.3) - 0.5, np.percentile(lente[:, 1], 99.7) + 0.5)
+    com = np.array([n > 0 for n in n_ict])
+    paineis = [(100 * f_est, "Cor = % das janelas do nó no estado lento", "% no estado lento", 100),
+               (100 * f_ict, "Cor = % das janelas do nó que são de crise", "% de janelas de crise", None)]
+    for ax, (v, titulo, rot, vmax) in zip(eixos, paineis):
+        sc = desenhar_grafo(ax, G, pos, v, tam_min=30, escala=5, cmap=estilo.SEQ, vmin=0, vmax=vmax)
+        # anel laranja nos nós que têm alguma janela de crise
+        ax.scatter(np.array([pos[n][0] for n in G])[com], np.array([pos[n][1] for n in G])[com],
+                   s=(30 + 5 * np.sqrt(tam))[com] + 110, facecolor="none", edgecolor=LARANJA, linewidths=2.2, zorder=4)
+        cb = plt.colorbar(sc, ax=ax, shrink=0.8, pad=0.01)
+        cb.set_label(rot)
+        cb.outline.set_visible(False)
+        ax.set_title(titulo)
+        ax.set_xlim(*lim_x)
+        ax.set_ylim(*lim_y)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.grid(False)
+    eixos[0].text(0.02, 0.02, "anel laranja = nó com alguma janela de crise", transform=eixos[0].transAxes, ha="left",
+                  va="bottom", fontsize=13.5, color=TINTA)
+    eixos[1].text(0.02, 0.02, f"o nó mais \"ictal\" tem {100 * f_ict.max():.1f} % de janelas de crise".replace(".", ","),
+                  transform=eixos[1].transAxes, ha="left", va="bottom", fontsize=13.5, color=TINTA)
+    fig.suptitle(f"Mapper nas 40 h do chb01 ({G.number_of_nodes()} nós): o grafo se organiza pelo estado lento, "
+                 "e nenhum nó é \"o nó da crise\"")
+    estilo.salvar(fig, DIR / "D9_mapper_chb01.png")
+    print("  mapper chb01:", {k: (round(v, 4) if isinstance(v, float) else v) for k, v in resumo.items()})
+    return resumo
+
+
 def main():
     estilo_didatico()
     DIR.mkdir(parents=True, exist_ok=True)
     import sys
-    quais = [a for a in sys.argv[1:] if a.startswith("D")] or ["D1", "D2", "D3", "D4", "D5", "D6"]
+    quais = [a for a in sys.argv[1:] if a.startswith("D")] or ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9"]
     if "D1" in quais:
         d1_como_ler()
     if "D2" in quais:
@@ -492,6 +736,12 @@ def main():
         d5_crises_detectadas()
     if "D6" in quais:
         d6_linha_do_tempo_chb01()
+    if "D7" in quais:
+        d7_ml()
+    if "D8" in quais:
+        print("  mapper do estudo de caso:", d8_mapper_como_funciona())
+    if "D9" in quais:
+        d9_mapper_chb01()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+descritores,auroc,auprc,prevalencia
+topologia (15),0.68,0.0082,0.0046
+clássico só forma (9),0.8711,0.0791,0.0046
+clássico com amplitude (12),0.964,0.4433,0.0046

@@ -63,6 +63,89 @@ teste em pacientes diferentes. Detalhes e ressalvas na seção [Resultados](#res
 > traz uma seção "Definição supervisionada: amostras, rótulos e output". O item 9 dos
 > resultados segue essa versão.
 
+## Tópicos avançados em destaque
+
+O enunciado lista quatro tópicos avançados. Os dois abaixo recebem mais atenção; a
+distância de bottleneck e a previsão estão nos itens 3 e 6 dos resultados.
+
+### Machine Learning: os descritores de H1 como entrada de um classificador
+
+**O que o enunciado pede.** Usar as características topológicas de cada janela como
+entrada de modelos de classificação, com a divisão treino/teste **por paciente** sempre
+que o objetivo for avaliar generalização para novos indivíduos.
+
+**Como foi feito.** Cada janela de 8 s vira 15 números tirados do diagrama de H1
+(persistência máxima e total, número de barras, entropia, normas das paisagens). Eles
+entram em uma regressão logística com hiperparâmetros fixos, que devolve um escore de
+crise. O modelo é sempre testado em dados que não viu: uma gravação inteira de fora no
+estudo de caso, um paciente inteiro de fora na análise com sete pacientes. O limiar do
+alarme é fixado no treino, e a comparação é com 12 descritores clássicos de EEG, sem
+topologia.
+
+![ML: como foi feito](resultados/didaticas/D7_ml_como_foi_feito.png)
+
+**O que deu.**
+
+| Descritores | Estudo de caso: AUROC | Sete pacientes: crises detectadas | Sete pacientes, 21 canais |
+|---|---|---|---|
+| Só topologia (H1) | 0,79 | 4 de 21 | 12 de 21 |
+| Clássico sem amplitude | 0,88 | 9 de 21 | 14 de 21 |
+| Clássico com amplitude | 0,99 | 18 de 21 | 21 de 21 |
+| Topologia + clássico | 0,98 | 21 de 21 | 21 de 21 |
+
+- **Sozinha, a topologia não serve de detector.** Fica abaixo até do baseline que, como
+  ela, ignora a amplitude.
+- **O limite está nos descritores, não no modelo nem na quantidade de dados.** Modelos
+  mais flexíveis (floresta aleatória, gradient boosting) decoram o treino (AUROC de
+  0,96 a 1,00) e ficam em 0,61 a 0,62 no paciente novo, contra 0,67 da regressão
+  logística. Treinar com 10 % ou com 100 % das janelas de crise quase não muda o
+  resultado (0,65 → 0,67).
+- **Somada ao baseline, ela não é redundante.** Recupera as três crises que o baseline
+  de um canal perde, e a AUPRC sobe nos quatro pacientes em que dá para medir. Com os
+  descritores topológicos embaralhados o ganho some, então ele não vem de ter mais colunas.
+- **A AUROC por janela engana.** Com 0,4 % de janelas de crise, um modelo com AUROC de
+  0,99 ainda dispara vários alarmes falsos por hora em um paciente novo. Por isso os
+  resultados são dados por crise e por hora.
+
+Código: `scripts/05` (estudo de caso), `11` e `12` (por paciente, rótulos e métricas do
+enunciado), `14` (21 canais) e `15` (modelos mais flexíveis e curva de aprendizado).
+Detalhes nos itens 4, 8, 9 e 11 dos resultados.
+
+### Mapper: o grafo das janelas
+
+**O que o enunciado pede.** Aplicar o Kepler Mapper ao conjunto de janelas, usando o
+tempo relativo ao início da crise ou descritores topológicos como lente.
+
+**Como foi feito.** Cada janela é um ponto descrito pelos 15 números de H1. A lente são
+as duas primeiras componentes principais desses descritores; o plano é coberto por
+12 × 12 quadrados com 40 % de sobreposição; dentro de cada quadrado as janelas parecidas
+são agrupadas (DBSCAN), e cada grupo vira um nó. Dois nós são ligados quando têm janelas
+em comum.
+
+![Mapper: como funciona](resultados/didaticas/D8_mapper_como_funciona.png)
+
+**O que deu.** A pergunta feita ao grafo é se existe um nó ou um ramo onde as janelas
+de crise se concentram. Não existe.
+
+![Mapper nas 40 h do chb01](resultados/didaticas/D9_mapper_chb01.png)
+
+- **Nas 40 h do chb01** (36 446 janelas, 7 crises, 110 nós), o nó mais "ictal" tem 7,7 %
+  de janelas de crise. As janelas de crise ficam espalhadas por 21 nós, misturadas a
+  milhares de janelas interictais.
+- **O que organiza o grafo é o estado lento** (item 10), não a crise: das 113 janelas
+  de crise que entraram no grafo, 110 estão em nós em que a maioria das janelas é desse
+  estado.
+- **No estudo de caso** (6 291 janelas, 63 nós), o nó mais ictal tem 2,4 %. Com a outra
+  lente sugerida no enunciado, o tempo relativo ao início da crise, o grafo é
+  praticamente um caminho, sem ramificação na crise.
+
+O Mapper chega, por outro caminho, à mesma conclusão da análise temporal: os
+descritores topológicos enxergam o estado do cérebro, não a crise.
+
+Código: `scripts/07` (estudo de caso, com as versões interativas
+`resultados/mapper_A_interativo.html` e `mapper_B_interativo.html`) e `scripts/13`
+(figuras e o Mapper nas 40 h). Detalhes no item 7 dos resultados.
+
 ## Material de apresentação
 
 - `projeto5_tda_eeg_colab.ipynb`: o projeto inteiro em um notebook comentado, com as saídas salvas
@@ -136,12 +219,12 @@ Janelas de 8 s com passo de 4 s: 6 293 no estudo de caso.
 | 4. Topologia | `tda_eeg/topologia.py`, `scripts/03` | Vietoris–Rips (GUDHI, dimensão 2) até a maior distância; contagem de classes censuradas quando há truncamento |
 | 5. Análise temporal | `scripts/04` | Persistência máxima e total, entropia, paisagens, nº de classes ao longo do tempo × anotações |
 | Avançado: bottleneck | `scripts/03`, `04` | d_B(D_t, D_{t−1}) entre janelas consecutivas |
-| Avançado: ML | `scripts/05` | Classificador ictal × não ictal, deixa-uma-gravação-fora, com baselines |
+| Avançado: ML | `scripts/05`, `11`, `12`, `14`, `15` | Classificador ictal × não ictal com baselines; deixa-uma-gravação-fora no estudo de caso e deixa-um-paciente-fora com sete pacientes |
 | Avançado: previsão | `scripts/06` | Horizonte pré-ictal, exclusão, alarmes falsos por hora e avaliação definidos formalmente |
-| Avançado: Mapper | `scripts/07` | Kepler Mapper com lente topológica e com lente de tempo relativo à crise |
+| Avançado: Mapper | `scripts/07`, `13` | Kepler Mapper com lente topológica e com lente de tempo relativo à crise; repetido nas 40 h do chb01 |
 | Boas práticas | `scripts/01`, `08`, `executar_tudo.py` | Validação sintética, sensibilidade a canal e (d, τ), sementes fixas, `pip freeze` |
 | "Diferentes janelas e pacientes" | `scripts/10`, `11` | Mesmo pipeline em sete pacientes; uma linha do tempo por paciente |
-| Figuras para a apresentação | `scripts/13` | Seis figuras didáticas, com a leitura escrita na própria figura |
+| Figuras para a apresentação | `scripts/13` | Nove figuras didáticas, com a leitura escrita na própria figura |
 | Além do enunciado: vários canais | `scripts/14` | O mesmo pipeline nos 21 canais, com os descritores juntos no modelo |
 | Supervisionada: unidade amostral | `tda_eeg/dados.py`, `scripts/12` | Uma janela = paciente, arquivo, canal e intervalo absoluto |
 | Supervisionada: rótulos | `scripts/12` | y=1 se a janela está totalmente contida na crise; y=0 se está a 1 h ou mais de qualquer crise; o resto fica sem rótulo |
@@ -269,6 +352,11 @@ caminho, sem ramificação na crise. Versões interativas:
 `resultados/mapper_A_interativo.html` e `mapper_B_interativo.html`.
 
 ![mapper](resultados/figuras/07_mapper_A.png)
+
+O mesmo Mapper foi repetido nas 40 h do chb01 (`scripts/13`, figura
+`resultados/didaticas/D9_mapper_chb01.png`): 110 nós, nenhum com mais de 7,7 % de janelas
+de crise, e 110 das 113 janelas de crise do grafo em nós dominados pelo estado lento.
+Ver a seção [Tópicos avançados em destaque](#tópicos-avançados-em-destaque).
 
 ### 8. Extensão multipaciente (sete pacientes, 21 crises)
 
@@ -445,6 +533,9 @@ leitura escrita na própria figura:
 | `D3_o_que_e_auroc.png` | a AUROC, com as janelas do estudo de caso |
 | `D4_todas_as_crises.png` | as 21 crises, uma por linha: topologia × amplitude |
 | `D5_crises_detectadas.png` | treino e teste por paciente: uma bolinha por crise |
+| `D7_ml_como_foi_feito.png` | o tópico de ML: da janela ao alarme e como o modelo é testado |
+| `D8_mapper_como_funciona.png` | o Mapper passo a passo: lente, cobertura, grupos e grafo |
+| `D9_mapper_chb01.png` | o Mapper nas 40 h do chb01: o grafo segue o estado, não a crise |
 
 ![como ler](resultados/didaticas/D1_como_ler_diagrama.png)
 ![expectativa e realidade](resultados/didaticas/D2_expectativa_realidade.png)

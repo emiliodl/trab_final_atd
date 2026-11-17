@@ -1,0 +1,35 @@
+AUROC medida em: chb01, chb02, chb03, chb04
+  topologia (15)               regressão logística  teste 0.67 | treino 0.71
+  topologia (15)               floresta aleatória   teste 0.61 | treino 1.00
+  topologia (15)               gradient boosting    teste 0.62 | treino 0.96
+  clássico só forma (9)        regressão logística  teste 0.85 | treino 0.88
+  clássico só forma (9)        floresta aleatória   teste 0.79 | treino 1.00
+  clássico só forma (9)        gradient boosting    teste 0.82 | treino 0.98
+  clássico com amplitude (12)  regressão logística  teste 0.98 | treino 0.98
+  clássico com amplitude (12)  floresta aleatória   teste 0.93 | treino 1.00
+  clássico com amplitude (12)  gradient boosting    teste 0.93 | treino 1.00
+
+1. Modelos (teste no paciente que ficou de fora):
+                descritores              modelo  auroc_teste_chb01  auroc_teste_chb02  auroc_teste_chb03  auroc_teste_chb04  auroc_teste_media  auroc_treino_media
+             topologia (15) regressão logística               0.78               0.62               0.52               0.78               0.67                0.71
+             topologia (15)  floresta aleatória               0.70               0.62               0.44               0.69               0.61                1.00
+             topologia (15)   gradient boosting               0.73               0.60               0.42               0.71               0.62                0.96
+      clássico só forma (9) regressão logística               0.90               0.86               0.66               0.97               0.85                0.88
+      clássico só forma (9)  floresta aleatória               0.89               0.86               0.59               0.81               0.79                1.00
+      clássico só forma (9)   gradient boosting               0.90               0.84               0.65               0.90               0.82                0.98
+clássico com amplitude (12) regressão logística               1.00               0.98               1.00               0.96               0.98                0.98
+clássico com amplitude (12)  floresta aleatória               0.98               0.98               0.94               0.82               0.93                1.00
+clássico com amplitude (12)   gradient boosting               0.98               0.97               0.95               0.83               0.93                1.00
+
+2. Teto com vazamento (janelas sorteadas, gradient boosting):
+                descritores  auroc  auprc  prevalencia
+             topologia (15)  0.680  0.008        0.005
+      clássico só forma (9)  0.871  0.079        0.005
+clássico com amplitude (12)  0.964  0.443        0.005
+
+3. Curva de aprendizado (AUROC média no teste):
+fracao_ictais_treino          0.10   0.25   0.50   1.00
+descritores                                            
+clássico com amplitude (12)  0.971  0.979  0.983  0.985
+clássico só forma (9)        0.826  0.837  0.846  0.847
+topologia (15)               0.645  0.642  0.661  0.674

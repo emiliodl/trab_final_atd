@@ -1,0 +1,84 @@
+[chb01]
+  36454 janelas | 1 s
+[chb02]
+  17319 janelas | 1 s
+[chb03]
+  7192 janelas | 1 s
+[chb04]
+  16778 janelas | 1 s
+[chb06]
+  3605 janelas | 2 s
+[chb08]
+  899 janelas | 2 s
+[chb12]
+  900 janelas | 2 s
+
+AUROC por canal (ictal x interictal afastado), mínimo e máximo entre os 21 canais:
+         auroc_pers_max       auroc_log_variancia      
+                    min   max                 min   max
+paciente                                               
+chb01              0.50  0.59                0.95  1.00
+chb02              0.38  0.61                0.91  1.00
+chb03              0.40  0.62                0.94  1.00
+chb04              0.45  0.64                0.68  0.97
+  Topologia, 1 canal (FP1-F7)                   0.78  0.62  0.52  0.78  nan  nan  nan  | crises (1 %): 4/21
+  Topologia, 21 canais concatenados             0.79  0.69  0.58  0.84  nan  nan  nan  | crises (1 %): 9/21
+  Topologia, 21 canais agregados                0.88  0.79  0.57  0.85  nan  nan  nan  | crises (1 %): 12/21
+  Clássico só forma, 21 canais agregados        0.84  0.86  0.74  0.92  nan  nan  nan  | crises (1 %): 14/21
+  Clássico com amplitude, 1 canal (FP1-F7)      1.00  0.98  1.00  0.96  nan  nan  nan  | crises (1 %): 18/21
+  Clássico com amplitude, 21 canais agregados   1.00  1.00  0.99  0.93  nan  nan  nan  | crises (1 %): 21/21
+  Topologia + clássico, 21 canais agregados     1.00  1.00  1.00  0.95  nan  nan  nan  | crises (1 %): 21/21
+
+                                descritores  n_colunas paciente_teste  auroc  auprc  auroc_treino  crises_detectadas_0.01  fa_h_0.01  crises_teste  crises_detectadas_0.001  fa_h_0.001
+                Topologia, 1 canal (FP1-F7)         15          chb01   0.78   0.01          0.66                       1       6.08             7                        0        0.51
+                Topologia, 1 canal (FP1-F7)         15          chb02   0.62   0.00          0.74                       1       7.35             3                        0        0.00
+                Topologia, 1 canal (FP1-F7)         15          chb03   0.52   0.02          0.74                       0       7.98             4                        0        0.59
+                Topologia, 1 canal (FP1-F7)         15          chb04   0.78   0.00          0.72                       1      17.02             1                        0        7.23
+                Topologia, 1 canal (FP1-F7)         15          chb06    NaN    NaN          0.72                       0        NaN             3                        0         NaN
+                Topologia, 1 canal (FP1-F7)         15          chb08    NaN    NaN          0.73                       0        NaN             1                        0         NaN
+                Topologia, 1 canal (FP1-F7)         15          chb12    NaN    NaN          0.72                       1        NaN             2                        0         NaN
+          Topologia, 21 canais concatenados        315          chb01   0.79   0.02          0.95                       5      12.32             7                        1        1.65
+          Topologia, 21 canais concatenados        315          chb02   0.69   0.01          0.96                       1      11.05             3                        0        0.86
+          Topologia, 21 canais concatenados        315          chb03   0.58   0.02          0.96                       1      28.38             4                        0        0.30
+          Topologia, 21 canais concatenados        315          chb04   0.84   0.00          0.95                       1      22.49             1                        0       11.95
+          Topologia, 21 canais concatenados        315          chb06    NaN    NaN          0.95                       0        NaN             3                        0         NaN
+          Topologia, 21 canais concatenados        315          chb08    NaN    NaN          0.95                       1        NaN             1                        0         NaN
+          Topologia, 21 canais concatenados        315          chb12    NaN    NaN          0.95                       0        NaN             2                        0         NaN
+             Topologia, 21 canais agregados         60          chb01   0.88   0.06          0.86                       6       3.84             7                        0        0.14
+             Topologia, 21 canais agregados         60          chb02   0.79   0.01          0.90                       2      10.79             3                        0        0.26
+             Topologia, 21 canais agregados         60          chb03   0.57   0.02          0.91                       1      21.29             4                        0        0.89
+             Topologia, 21 canais agregados         60          chb04   0.85   0.00          0.89                       1       7.87             1                        0        4.84
+             Topologia, 21 canais agregados         60          chb06    NaN    NaN          0.89                       0        NaN             3                        0         NaN
+             Topologia, 21 canais agregados         60          chb08    NaN    NaN          0.88                       1        NaN             1                        0         NaN
+             Topologia, 21 canais agregados         60          chb12    NaN    NaN          0.89                       1        NaN             2                        0         NaN
+     Clássico só forma, 21 canais agregados         36          chb01   0.84   0.01          0.95                       3      10.85             7                        0        0.17
+     Clássico só forma, 21 canais agregados         36          chb02   0.86   0.02          0.96                       3      17.01             3                        0        3.44
+     Clássico só forma, 21 canais agregados         36          chb03   0.74   0.09          0.96                       4       5.62             4                        0        0.00
+     Clássico só forma, 21 canais agregados         36          chb04   0.92   0.00          0.95                       1      10.43             1                        0        4.84
+     Clássico só forma, 21 canais agregados         36          chb06    NaN    NaN          0.95                       0        NaN             3                        0         NaN
+     Clássico só forma, 21 canais agregados         36          chb08    NaN    NaN          0.94                       1        NaN             1                        0         NaN
+     Clássico só forma, 21 canais agregados         36          chb12    NaN    NaN          0.97                       2        NaN             2                        0         NaN
+   Clássico com amplitude, 1 canal (FP1-F7)         12          chb01   1.00   0.67          0.98                       7       5.35             7                        5        0.34
+   Clássico com amplitude, 1 canal (FP1-F7)         12          chb02   0.98   0.25          0.98                       3      12.18             3                        3        1.92
+   Clássico com amplitude, 1 canal (FP1-F7)         12          chb03   1.00   0.95          0.98                       4       0.00             4                        4        0.00
+   Clássico com amplitude, 1 canal (FP1-F7)         12          chb04   0.96   0.02          0.98                       1       4.37             1                        0        0.41
+   Clássico com amplitude, 1 canal (FP1-F7)         12          chb06    NaN    NaN          0.98                       1        NaN             3                        0         NaN
+   Clássico com amplitude, 1 canal (FP1-F7)         12          chb08    NaN    NaN          0.98                       1        NaN             1                        1         NaN
+   Clássico com amplitude, 1 canal (FP1-F7)         12          chb12    NaN    NaN          0.99                       1        NaN             2                        0         NaN
+Clássico com amplitude, 21 canais agregados         48          chb01   1.00   0.90          1.00                       7      33.02             7                        7        7.48
+Clássico com amplitude, 21 canais agregados         48          chb02   1.00   0.99          1.00                       3      44.80             3                        3        4.17
+Clássico com amplitude, 21 canais agregados         48          chb03   0.99   0.96          1.00                       4       0.00             4                        4        0.00
+Clássico com amplitude, 21 canais agregados         48          chb04   0.93   0.01          1.00                       1       2.56             1                        1        1.63
+Clássico com amplitude, 21 canais agregados         48          chb06    NaN    NaN          1.00                       3        NaN             3                        3         NaN
+Clássico com amplitude, 21 canais agregados         48          chb08    NaN    NaN          1.00                       1        NaN             1                        1         NaN
+Clássico com amplitude, 21 canais agregados         48          chb12    NaN    NaN          1.00                       2        NaN             2                        2         NaN
+  Topologia + clássico, 21 canais agregados        108          chb01   1.00   0.95          1.00                       7      19.56             7                        7        5.15
+  Topologia + clássico, 21 canais agregados        108          chb02   1.00   0.95          1.00                       3      52.42             3                        3        9.13
+  Topologia + clássico, 21 canais agregados        108          chb03   1.00   0.98          1.00                       4       0.00             4                        4        0.00
+  Topologia + clássico, 21 canais agregados        108          chb04   0.95   0.01          1.00                       1       5.36             1                        1        5.36
+  Topologia + clássico, 21 canais agregados        108          chb06    NaN    NaN          1.00                       3        NaN             3                        3         NaN
+  Topologia + clássico, 21 canais agregados        108          chb08    NaN    NaN          1.00                       1        NaN             1                        1         NaN
+  Topologia + clássico, 21 canais agregados        108          chb12    NaN    NaN          1.00                       2        NaN             2                        2         NaN
+  figura: 14_multicanal_crises.png
+
+Tempo total: 45 s

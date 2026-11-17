@@ -1,10 +1,22 @@
 descritores,paciente_teste,acuracia_balanceada,auroc_interictal_vs_resto,n_interictal,auroc_pre-ictal_vs_resto,n_pre-ictal,auroc_ictal_vs_resto,n_ictal
-Topológico H1,chb01,0.2788,0.2268,3973,0.1434,297,0.8071,14
-Topológico H1,chb02,0.3582,0.3939,13599,0.5351,442,0.5838,38
-Topológico H1,chb03,0.3157,0.3419,3044,0.683,531,0.4763,53
-Clássico: forma + amplitude,chb01,0.4902,0.2094,3973,0.17,297,0.9976,14
-Clássico: forma + amplitude,chb02,0.5313,0.5154,13599,0.358,442,0.9825,38
-Clássico: forma + amplitude,chb03,0.5938,0.5028,3044,0.4073,531,0.9903,53
-Topológico + clássico,chb01,0.4983,0.2211,3973,0.1699,297,0.9988,14
-Topológico + clássico,chb02,0.5461,0.4268,13599,0.3241,442,0.9896,38
-Topológico + clássico,chb03,0.5668,0.4788,3044,0.4149,531,0.996,53
+Topológico H1,chb01,0.3616,0.5758,26221,0.2865,976,0.7771,100
+Topológico H1,chb02,0.3502,0.3762,13599,0.4665,442,0.6003,38
+Topológico H1,chb03,0.3044,0.3089,3044,0.5493,531,0.5534,53
+Topológico H1,chb04,0.5014,0.4064,15445,0.6338,149,0.7805,11
+Topológico H1,chb06,0.5234,,0,0.7262,445,0.7071,6
+Topológico H1,chb08,0.3115,,0,0.57,148,0.8639,41
+Topológico H1,chb12,0.3976,,0,0.3871,296,0.3892,19
+Clássico: forma + amplitude,chb01,0.6361,0.5745,26221,0.4171,976,0.9966,100
+Clássico: forma + amplitude,chb02,0.6475,0.6452,13599,0.4998,442,0.9839,38
+Clássico: forma + amplitude,chb03,0.636,0.6115,3044,0.4885,531,0.9816,53
+Clássico: forma + amplitude,chb04,0.4755,0.6774,15445,0.5821,149,0.9382,11
+Clássico: forma + amplitude,chb06,0.441,,0,0.3764,445,0.3742,6
+Clássico: forma + amplitude,chb08,0.5308,,0,0.7904,148,0.9801,41
+Clássico: forma + amplitude,chb12,0.306,,0,0.3956,296,0.6223,19
+Topológico + clássico,chb01,0.6336,0.5748,26221,0.41,976,0.9984,100
+Topológico + clássico,chb02,0.6132,0.5798,13599,0.4813,442,0.9874,38
+Topológico + clássico,chb03,0.6578,0.6065,3044,0.5241,531,0.9942,53
+Topológico + clássico,chb04,0.5128,0.6914,15445,0.5872,149,0.9602,11
+Topológico + clássico,chb06,0.5378,,0,0.5768,445,0.5408,6
+Topológico + clássico,chb08,0.6025,,0,0.8352,148,0.9852,41
+Topológico + clássico,chb12,0.3492,,0,0.3538,296,0.6003,19

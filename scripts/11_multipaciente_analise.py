@@ -41,8 +41,13 @@ CONJUNTOS = {
     "Clássico: forma + amplitude": baseline.COLUNAS_BASE,
     "Topológico + clássico": topologia.COLUNAS_TOPO + baseline.COLUNAS_BASE,
 }
-COR_PAC = {"chb01": estilo.AZUL, "chb02": estilo.AGUA, "chb03": estilo.VIOLETA}
-MARCA_PAC = {"chb01": "o", "chb02": "s", "chb03": "D"}
+COR_PAC, MARCA_PAC = estilo.COR_PACIENTE, estilo.MARCA_PACIENTE
+
+
+def desloc(k):
+    """Deslocamento vertical do k-ésimo paciente dentro de uma linha da figura."""
+    n = len(cfg.PACIENTES_MULTI)
+    return (k - (n - 1) / 2) * min(0.18, 0.72 / n)
 VALIDAS = ["ictal", "interictal", "pre-ictal"]
 
 
@@ -139,9 +144,11 @@ def alarmes_por_hora(sub, s, y, validas):
     """Alarmes falsos/h no limiar que detecta TODAS as crises do paciente."""
     neg = validas & (y == 0)
     horas = neg.sum() * cfg.PASSO_S / 3600
-    picos = [s[(sub.crise_proxima == c).to_numpy() & (y == 1)].max()
+    picos = [np.nanmax(s[(sub.crise_proxima == c).to_numpy() & (y == 1)])
              for c in sub.loc[y == 1, "crise_proxima"].unique()]
     lim = min(picos)
+    if not np.isfinite(lim) or horas == 0:
+        return np.nan
     falsos = sum(avaliacao.sequencias((s >= lim)[m] & neg[m])
                  for m in [(sub.gravacao == g).to_numpy() for g in sub.gravacao.unique()])
     return falsos / horas
@@ -166,15 +173,18 @@ def classificacao(df):
                 m = (df.paciente == pac).to_numpy()
                 v = m & validas & np.isfinite(s)
                 sub = df[m].reset_index(drop=True)
+                # sem as duas classes pontuadas não há AUROC: paciente com uma só gravação (dentro do
+                # paciente não há o que deixar de fora) ou com uma só gravação com crise
+                ok = v.any() and 0 < y[v].sum() < v.sum()
                 linhas.append({
                     "esquema": esquema, "descritores": nome_c, "paciente": pac,
-                    "auroc": roc_auc_score(y[v], s[v]),
-                    "auprc": average_precision_score(y[v], s[v]),
-                    "prevalencia": y[v].mean(),
-                    "fa_h_todas_crises": alarmes_por_hora(sub, s[m], y[m], validas[m]),
+                    "auroc": roc_auc_score(y[v], s[v]) if ok else np.nan,
+                    "auprc": average_precision_score(y[v], s[v]) if ok else np.nan,
+                    "prevalencia": y[v].mean() if v.any() else np.nan,
+                    "fa_h_todas_crises": alarmes_por_hora(sub, s[m], y[m], validas[m] & np.isfinite(s[m])) if ok else np.nan,
                 })
             print(f"  {esquema:20s} {nome_c:28s} " + "  ".join(
-                f"{r['paciente']} {r['auroc']:.2f}" for r in linhas[-3:]), flush=True)
+                f"{r['paciente']} {r['auroc']:.2f}" for r in linhas[-len(cfg.PACIENTES_MULTI):]), flush=True)
     return pd.DataFrame(linhas)
 
 
@@ -192,7 +202,7 @@ def fig_auroc(tab):
         ax.axvline(0.5, color=estilo.EIXO, lw=1.2)
         for k, pac in enumerate(cfg.PACIENTES_MULTI):
             v = [tab[(tab.paciente == pac) & (tab.descritor == n)][col].item() for n in nomes]
-            ax.scatter(v, yy + (k - 1) * 0.18, s=55, marker=MARCA_PAC[pac], color=COR_PAC[pac],
+            ax.scatter(v, yy - desloc(k), s=55, marker=MARCA_PAC[pac], color=COR_PAC[pac],
                        edgecolor=estilo.SUPERFICIE, linewidths=0.8, zorder=3, label=pac)
         ax.set_xlim(0, 1.02)
         ax.set_xlabel("AUROC ictal × interictal (0,5 = acaso)")
@@ -213,7 +223,7 @@ def fig_crises(df, gravs):
     crises = [(g, a, b) for g in gravs for a, b in g.crises]
     pacs = list(cfg.PACIENTES_MULTI)
     ncol = max(sum(g.paciente == p for g, _, _ in crises) for p in pacs)
-    fig, eixos = plt.subplots(len(pacs), ncol, figsize=(3.4 * ncol, 2.7 * len(pacs)),
+    fig, eixos = plt.subplots(len(pacs), ncol, figsize=(3.4 * ncol, 2.3 * len(pacs)),
                               sharex=True, sharey=True, constrained_layout=True)
     perc = {}
     for pac in pacs:
@@ -245,7 +255,7 @@ def fig_crises(df, gravs):
             if i == len(pacs) - 1 or j >= sum(gg.paciente == pacs[i + 1] for gg, _, _ in crises):
                 ax.set_xlabel("tempo relativo ao início (s)")
     eixos[0, 0].legend(loc="upper left", fontsize=8)
-    fig.suptitle("As 9 crises: percentil de cada janela entre as janelas interictais do mesmo paciente "
+    fig.suptitle(f"As {len(crises)} crises: percentil de cada janela entre as janelas interictais do mesmo paciente "
                  "(faixa laranja = crise; cinza = percentis 25-75)")
     estilo.salvar(fig, DIR_FIG / "10_crises_percentis.png")
 
@@ -259,9 +269,11 @@ def fig_classificacao(clf):
                              "Entre pacientes (deixa-um-paciente-fora)"]):
         ax.axvline(0.5, color=estilo.EIXO, lw=1.2)
         for k, pac in enumerate(cfg.PACIENTES_MULTI):
-            v = [clf[(clf.esquema == esq) & (clf.paciente == pac) & (clf.descritores == n)].auroc.item()
-                 for n in nomes]
-            ax.scatter(v, yy + (k - 1) * 0.18, s=60, marker=MARCA_PAC[pac], color=COR_PAC[pac],
+            v = np.array([clf[(clf.esquema == esq) & (clf.paciente == pac) & (clf.descritores == n)].auroc.item()
+                          for n in nomes])
+            if not np.isfinite(v).any():
+                continue
+            ax.scatter(v, yy - desloc(k), s=60, marker=MARCA_PAC[pac], color=COR_PAC[pac],
                        edgecolor=estilo.SUPERFICIE, linewidths=0.8, zorder=3, label=pac)
         ax.set_xlim(0.3, 1.02)
         ax.set_xlabel("AUROC no paciente testado (0,5 = acaso)")
@@ -296,7 +308,7 @@ def main():
     estilo.aplicar()
     DIR_FIG.mkdir(parents=True, exist_ok=True)
     DIR_TAB.mkdir(parents=True, exist_ok=True)
-    gravs = dados.listar_gravacoes(pacientes=cfg.PACIENTES_MULTI)
+    gravs = dados.listar_gravacoes(pacientes=cfg.PACIENTES_MULTI, restringir=None)
     df = carregar()
 
     resumo = (df.groupby("paciente").agg(gravacoes=("gravacao", "nunique"), janelas=("t_ini", "size"))

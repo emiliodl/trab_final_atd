@@ -1,20 +1,60 @@
 esquema,descritores,fpr_treino,crise,detectada,atraso_s
 entre pacientes,Topológico H1,0.01,chb01_03@2996s,False,
-entre pacientes,Topológico H1,0.01,chb01_04@1467s,True,9.0
+entre pacientes,Topológico H1,0.01,chb01_04@1467s,False,
+entre pacientes,Topológico H1,0.01,chb01_15@1732s,False,
+entre pacientes,Topológico H1,0.01,chb01_16@1015s,False,
+entre pacientes,Topológico H1,0.01,chb01_18@1720s,False,
+entre pacientes,Topológico H1,0.01,chb01_21@327s,False,
+entre pacientes,Topológico H1,0.01,chb01_26@1862s,True,18.0
 entre pacientes,Topológico H1,0.001,chb01_03@2996s,False,
 entre pacientes,Topológico H1,0.001,chb01_04@1467s,False,
+entre pacientes,Topológico H1,0.001,chb01_15@1732s,False,
+entre pacientes,Topológico H1,0.001,chb01_16@1015s,False,
+entre pacientes,Topológico H1,0.001,chb01_18@1720s,False,
+entre pacientes,Topológico H1,0.001,chb01_21@327s,False,
+entre pacientes,Topológico H1,0.001,chb01_26@1862s,False,
 entre pacientes,Clássico: só forma,0.01,chb01_03@2996s,False,
 entre pacientes,Clássico: só forma,0.01,chb01_04@1467s,True,17.0
+entre pacientes,Clássico: só forma,0.01,chb01_15@1732s,False,
+entre pacientes,Clássico: só forma,0.01,chb01_16@1015s,False,
+entre pacientes,Clássico: só forma,0.01,chb01_18@1720s,True,12.0
+entre pacientes,Clássico: só forma,0.01,chb01_21@327s,True,41.0
+entre pacientes,Clássico: só forma,0.01,chb01_26@1862s,False,
 entre pacientes,Clássico: só forma,0.001,chb01_03@2996s,False,
 entre pacientes,Clássico: só forma,0.001,chb01_04@1467s,False,
-entre pacientes,Clássico: forma + amplitude,0.01,chb01_03@2996s,True,4.0
-entre pacientes,Clássico: forma + amplitude,0.01,chb01_04@1467s,True,5.0
-entre pacientes,Clássico: forma + amplitude,0.001,chb01_03@2996s,True,24.0
-entre pacientes,Clássico: forma + amplitude,0.001,chb01_04@1467s,True,17.0
+entre pacientes,Clássico: só forma,0.001,chb01_15@1732s,False,
+entre pacientes,Clássico: só forma,0.001,chb01_16@1015s,False,
+entre pacientes,Clássico: só forma,0.001,chb01_18@1720s,False,
+entre pacientes,Clássico: só forma,0.001,chb01_21@327s,False,
+entre pacientes,Clássico: só forma,0.001,chb01_26@1862s,False,
+entre pacientes,Clássico: forma + amplitude,0.01,chb01_03@2996s,True,8.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb01_04@1467s,True,9.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb01_15@1732s,True,24.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb01_16@1015s,True,5.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb01_18@1720s,True,8.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb01_21@327s,True,9.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb01_26@1862s,True,10.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb01_03@2996s,True,20.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb01_04@1467s,False,
+entre pacientes,Clássico: forma + amplitude,0.001,chb01_15@1732s,False,
+entre pacientes,Clássico: forma + amplitude,0.001,chb01_16@1015s,True,21.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb01_18@1720s,True,12.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb01_21@327s,True,13.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb01_26@1862s,True,14.0
 entre pacientes,Topológico + clássico,0.01,chb01_03@2996s,True,8.0
 entre pacientes,Topológico + clássico,0.01,chb01_04@1467s,True,1.0
+entre pacientes,Topológico + clássico,0.01,chb01_15@1732s,True,4.0
+entre pacientes,Topológico + clássico,0.01,chb01_16@1015s,True,1.0
+entre pacientes,Topológico + clássico,0.01,chb01_18@1720s,True,8.0
+entre pacientes,Topológico + clássico,0.01,chb01_21@327s,True,9.0
+entre pacientes,Topológico + clássico,0.01,chb01_26@1862s,True,10.0
 entre pacientes,Topológico + clássico,0.001,chb01_03@2996s,True,8.0
 entre pacientes,Topológico + clássico,0.001,chb01_04@1467s,True,9.0
+entre pacientes,Topológico + clássico,0.001,chb01_15@1732s,True,4.0
+entre pacientes,Topológico + clássico,0.001,chb01_16@1015s,True,9.0
+entre pacientes,Topológico + clássico,0.001,chb01_18@1720s,True,12.0
+entre pacientes,Topológico + clássico,0.001,chb01_21@327s,True,13.0
+entre pacientes,Topológico + clássico,0.001,chb01_26@1862s,True,14.0
 entre pacientes,Topológico H1,0.01,chb02_16@130s,False,
 entre pacientes,Topológico H1,0.01,chb02_16+@2972s,True,72.0
 entre pacientes,Topológico H1,0.01,chb02_19@3369s,False,
@@ -23,22 +63,22 @@ entre pacientes,Topológico H1,0.001,chb02_16+@2972s,False,
 entre pacientes,Topológico H1,0.001,chb02_19@3369s,False,
 entre pacientes,Clássico: só forma,0.01,chb02_16@130s,True,38.0
 entre pacientes,Clássico: só forma,0.01,chb02_16+@2972s,True,8.0
-entre pacientes,Clássico: só forma,0.01,chb02_19@3369s,True,7.0
+entre pacientes,Clássico: só forma,0.01,chb02_19@3369s,False,
 entre pacientes,Clássico: só forma,0.001,chb02_16@130s,False,
 entre pacientes,Clássico: só forma,0.001,chb02_16+@2972s,False,
 entre pacientes,Clássico: só forma,0.001,chb02_19@3369s,False,
 entre pacientes,Clássico: forma + amplitude,0.01,chb02_16@130s,True,14.0
-entre pacientes,Clássico: forma + amplitude,0.01,chb02_16+@2972s,True,12.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb02_16+@2972s,True,16.0
 entre pacientes,Clássico: forma + amplitude,0.01,chb02_19@3369s,True,7.0
-entre pacientes,Clássico: forma + amplitude,0.001,chb02_16@130s,True,42.0
-entre pacientes,Clássico: forma + amplitude,0.001,chb02_16+@2972s,True,16.0
-entre pacientes,Clássico: forma + amplitude,0.001,chb02_19@3369s,False,
+entre pacientes,Clássico: forma + amplitude,0.001,chb02_16@130s,True,38.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb02_16+@2972s,True,20.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb02_19@3369s,True,11.0
 entre pacientes,Topológico + clássico,0.01,chb02_16@130s,True,14.0
-entre pacientes,Topológico + clássico,0.01,chb02_16+@2972s,True,12.0
+entre pacientes,Topológico + clássico,0.01,chb02_16+@2972s,True,16.0
 entre pacientes,Topológico + clássico,0.01,chb02_19@3369s,True,7.0
-entre pacientes,Topológico + clássico,0.001,chb02_16@130s,True,14.0
+entre pacientes,Topológico + clássico,0.001,chb02_16@130s,True,18.0
 entre pacientes,Topológico + clássico,0.001,chb02_16+@2972s,True,16.0
-entre pacientes,Topológico + clássico,0.001,chb02_19@3369s,True,7.0
+entre pacientes,Topológico + clássico,0.001,chb02_19@3369s,True,11.0
 entre pacientes,Topológico H1,0.01,chb03_01@362s,False,
 entre pacientes,Topológico H1,0.01,chb03_02@731s,False,
 entre pacientes,Topológico H1,0.01,chb03_03@432s,False,
@@ -48,37 +88,117 @@ entre pacientes,Topológico H1,0.001,chb03_02@731s,False,
 entre pacientes,Topológico H1,0.001,chb03_03@432s,False,
 entre pacientes,Topológico H1,0.001,chb03_04@2162s,False,
 entre pacientes,Clássico: só forma,0.01,chb03_01@362s,False,
-entre pacientes,Clássico: só forma,0.01,chb03_02@731s,False,
+entre pacientes,Clássico: só forma,0.01,chb03_02@731s,True,9.0
 entre pacientes,Clássico: só forma,0.01,chb03_03@432s,False,
 entre pacientes,Clássico: só forma,0.01,chb03_04@2162s,False,
 entre pacientes,Clássico: só forma,0.001,chb03_01@362s,False,
 entre pacientes,Clássico: só forma,0.001,chb03_02@731s,False,
 entre pacientes,Clássico: só forma,0.001,chb03_03@432s,False,
 entre pacientes,Clássico: só forma,0.001,chb03_04@2162s,False,
-entre pacientes,Clássico: forma + amplitude,0.01,chb03_01@362s,True,22.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb03_01@362s,True,10.0
 entre pacientes,Clássico: forma + amplitude,0.01,chb03_02@731s,True,9.0
 entre pacientes,Clássico: forma + amplitude,0.01,chb03_03@432s,True,8.0
-entre pacientes,Clássico: forma + amplitude,0.01,chb03_04@2162s,True,2.0
-entre pacientes,Clássico: forma + amplitude,0.001,chb03_01@362s,True,26.0
-entre pacientes,Clássico: forma + amplitude,0.001,chb03_02@731s,True,9.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb03_04@2162s,True,6.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb03_01@362s,True,58.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb03_02@731s,True,13.0
 entre pacientes,Clássico: forma + amplitude,0.001,chb03_03@432s,True,20.0
 entre pacientes,Clássico: forma + amplitude,0.001,chb03_04@2162s,True,14.0
-entre pacientes,Topológico + clássico,0.01,chb03_01@362s,True,14.0
-entre pacientes,Topológico + clássico,0.01,chb03_02@731s,True,9.0
+entre pacientes,Topológico + clássico,0.01,chb03_01@362s,True,6.0
+entre pacientes,Topológico + clássico,0.01,chb03_02@731s,True,13.0
 entre pacientes,Topológico + clássico,0.01,chb03_03@432s,True,8.0
 entre pacientes,Topológico + clássico,0.01,chb03_04@2162s,True,6.0
 entre pacientes,Topológico + clássico,0.001,chb03_01@362s,True,22.0
-entre pacientes,Topológico + clássico,0.001,chb03_02@731s,True,13.0
-entre pacientes,Topológico + clássico,0.001,chb03_03@432s,True,16.0
-entre pacientes,Topológico + clássico,0.001,chb03_04@2162s,True,6.0
-cronológica (mesmo paciente),Topológico H1,0.01,chb01_04@1467s,False,
-cronológica (mesmo paciente),Topológico H1,0.001,chb01_04@1467s,False,
-cronológica (mesmo paciente),Clássico: só forma,0.01,chb01_04@1467s,True,9.0
-cronológica (mesmo paciente),Clássico: só forma,0.001,chb01_04@1467s,True,9.0
-cronológica (mesmo paciente),Clássico: forma + amplitude,0.01,chb01_04@1467s,True,5.0
-cronológica (mesmo paciente),Clássico: forma + amplitude,0.001,chb01_04@1467s,True,9.0
-cronológica (mesmo paciente),Topológico + clássico,0.01,chb01_04@1467s,True,1.0
-cronológica (mesmo paciente),Topológico + clássico,0.001,chb01_04@1467s,True,1.0
+entre pacientes,Topológico + clássico,0.001,chb03_02@731s,True,29.0
+entre pacientes,Topológico + clássico,0.001,chb03_03@432s,True,20.0
+entre pacientes,Topológico + clássico,0.001,chb03_04@2162s,True,14.0
+entre pacientes,Topológico H1,0.01,chb04_05@7804s,True,32.0
+entre pacientes,Topológico H1,0.001,chb04_05@7804s,False,
+entre pacientes,Clássico: só forma,0.01,chb04_05@7804s,True,4.0
+entre pacientes,Clássico: só forma,0.001,chb04_05@7804s,True,4.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb04_05@7804s,True,40.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb04_05@7804s,False,
+entre pacientes,Topológico + clássico,0.01,chb04_05@7804s,True,28.0
+entre pacientes,Topológico + clássico,0.001,chb04_05@7804s,False,
+entre pacientes,Topológico H1,0.01,chb06_01@1724s,False,
+entre pacientes,Topológico H1,0.01,chb06_01@7461s,False,
+entre pacientes,Topológico H1,0.01,chb06_01@13525s,False,
+entre pacientes,Topológico H1,0.001,chb06_01@1724s,False,
+entre pacientes,Topológico H1,0.001,chb06_01@7461s,False,
+entre pacientes,Topológico H1,0.001,chb06_01@13525s,False,
+entre pacientes,Clássico: só forma,0.01,chb06_01@1724s,False,
+entre pacientes,Clássico: só forma,0.01,chb06_01@7461s,False,
+entre pacientes,Clássico: só forma,0.01,chb06_01@13525s,False,
+entre pacientes,Clássico: só forma,0.001,chb06_01@1724s,False,
+entre pacientes,Clássico: só forma,0.001,chb06_01@7461s,False,
+entre pacientes,Clássico: só forma,0.001,chb06_01@13525s,False,
+entre pacientes,Clássico: forma + amplitude,0.01,chb06_01@1724s,False,
+entre pacientes,Clássico: forma + amplitude,0.01,chb06_01@7461s,False,
+entre pacientes,Clássico: forma + amplitude,0.01,chb06_01@13525s,True,3.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb06_01@1724s,False,
+entre pacientes,Clássico: forma + amplitude,0.001,chb06_01@7461s,False,
+entre pacientes,Clássico: forma + amplitude,0.001,chb06_01@13525s,False,
+entre pacientes,Topológico + clássico,0.01,chb06_01@1724s,True,4.0
+entre pacientes,Topológico + clássico,0.01,chb06_01@7461s,True,7.0
+entre pacientes,Topológico + clássico,0.01,chb06_01@13525s,True,3.0
+entre pacientes,Topológico + clássico,0.001,chb06_01@1724s,False,
+entre pacientes,Topológico + clássico,0.001,chb06_01@7461s,True,11.0
+entre pacientes,Topológico + clássico,0.001,chb06_01@13525s,False,
+entre pacientes,Topológico H1,0.01,chb08_02@2670s,False,
+entre pacientes,Topológico H1,0.001,chb08_02@2670s,False,
+entre pacientes,Clássico: só forma,0.01,chb08_02@2670s,True,98.0
+entre pacientes,Clássico: só forma,0.001,chb08_02@2670s,False,
+entre pacientes,Clássico: forma + amplitude,0.01,chb08_02@2670s,True,10.0
+entre pacientes,Clássico: forma + amplitude,0.001,chb08_02@2670s,True,14.0
+entre pacientes,Topológico + clássico,0.01,chb08_02@2670s,True,10.0
+entre pacientes,Topológico + clássico,0.001,chb08_02@2670s,True,10.0
+entre pacientes,Topológico H1,0.01,chb12_06@1665s,False,
+entre pacientes,Topológico H1,0.01,chb12_06@3415s,True,5.0
+entre pacientes,Topológico H1,0.001,chb12_06@1665s,False,
+entre pacientes,Topológico H1,0.001,chb12_06@3415s,False,
+entre pacientes,Clássico: só forma,0.01,chb12_06@1665s,True,27.0
+entre pacientes,Clássico: só forma,0.01,chb12_06@3415s,False,
+entre pacientes,Clássico: só forma,0.001,chb12_06@1665s,False,
+entre pacientes,Clássico: só forma,0.001,chb12_06@3415s,False,
+entre pacientes,Clássico: forma + amplitude,0.01,chb12_06@1665s,True,27.0
+entre pacientes,Clássico: forma + amplitude,0.01,chb12_06@3415s,False,
+entre pacientes,Clássico: forma + amplitude,0.001,chb12_06@1665s,False,
+entre pacientes,Clássico: forma + amplitude,0.001,chb12_06@3415s,False,
+entre pacientes,Topológico + clássico,0.01,chb12_06@1665s,True,23.0
+entre pacientes,Topológico + clássico,0.01,chb12_06@3415s,True,25.0
+entre pacientes,Topológico + clássico,0.001,chb12_06@1665s,False,
+entre pacientes,Topológico + clássico,0.001,chb12_06@3415s,False,
+cronológica (mesmo paciente),Topológico H1,0.01,chb01_16@1015s,False,
+cronológica (mesmo paciente),Topológico H1,0.01,chb01_18@1720s,False,
+cronológica (mesmo paciente),Topológico H1,0.01,chb01_21@327s,True,61.0
+cronológica (mesmo paciente),Topológico H1,0.01,chb01_26@1862s,True,18.0
+cronológica (mesmo paciente),Topológico H1,0.001,chb01_16@1015s,False,
+cronológica (mesmo paciente),Topológico H1,0.001,chb01_18@1720s,False,
+cronológica (mesmo paciente),Topológico H1,0.001,chb01_21@327s,False,
+cronológica (mesmo paciente),Topológico H1,0.001,chb01_26@1862s,True,18.0
+cronológica (mesmo paciente),Clássico: só forma,0.01,chb01_16@1015s,True,5.0
+cronológica (mesmo paciente),Clássico: só forma,0.01,chb01_18@1720s,True,12.0
+cronológica (mesmo paciente),Clássico: só forma,0.01,chb01_21@327s,True,25.0
+cronológica (mesmo paciente),Clássico: só forma,0.01,chb01_26@1862s,True,14.0
+cronológica (mesmo paciente),Clássico: só forma,0.001,chb01_16@1015s,True,45.0
+cronológica (mesmo paciente),Clássico: só forma,0.001,chb01_18@1720s,True,76.0
+cronológica (mesmo paciente),Clássico: só forma,0.001,chb01_21@327s,False,
+cronológica (mesmo paciente),Clássico: só forma,0.001,chb01_26@1862s,True,34.0
+cronológica (mesmo paciente),Clássico: forma + amplitude,0.01,chb01_16@1015s,True,5.0
+cronológica (mesmo paciente),Clássico: forma + amplitude,0.01,chb01_18@1720s,True,4.0
+cronológica (mesmo paciente),Clássico: forma + amplitude,0.01,chb01_21@327s,True,9.0
+cronológica (mesmo paciente),Clássico: forma + amplitude,0.01,chb01_26@1862s,True,10.0
+cronológica (mesmo paciente),Clássico: forma + amplitude,0.001,chb01_16@1015s,True,5.0
+cronológica (mesmo paciente),Clássico: forma + amplitude,0.001,chb01_18@1720s,True,12.0
+cronológica (mesmo paciente),Clássico: forma + amplitude,0.001,chb01_21@327s,True,13.0
+cronológica (mesmo paciente),Clássico: forma + amplitude,0.001,chb01_26@1862s,True,10.0
+cronológica (mesmo paciente),Topológico + clássico,0.01,chb01_16@1015s,True,1.0
+cronológica (mesmo paciente),Topológico + clássico,0.01,chb01_18@1720s,True,8.0
+cronológica (mesmo paciente),Topológico + clássico,0.01,chb01_21@327s,True,13.0
+cronológica (mesmo paciente),Topológico + clássico,0.01,chb01_26@1862s,True,10.0
+cronológica (mesmo paciente),Topológico + clássico,0.001,chb01_16@1015s,True,1.0
+cronológica (mesmo paciente),Topológico + clássico,0.001,chb01_18@1720s,True,8.0
+cronológica (mesmo paciente),Topológico + clássico,0.001,chb01_21@327s,True,17.0
+cronológica (mesmo paciente),Topológico + clássico,0.001,chb01_26@1862s,True,10.0
 cronológica (mesmo paciente),Topológico H1,0.01,chb02_16+@2972s,False,
 cronológica (mesmo paciente),Topológico H1,0.01,chb02_19@3369s,False,
 cronológica (mesmo paciente),Topológico H1,0.001,chb02_16+@2972s,False,

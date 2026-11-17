@@ -13,8 +13,11 @@ persistência máxima de H1 quase não distingue as janelas ictais das intericta
 (AUROC 0,60), e um baseline simples de amplitude separa muito melhor (AUROC 0,84 a
 0,97). Os descritores de H1 acompanham um estado lento do EEG que dura cerca de duas
 horas e contém as duas crises, mas não o intervalo de 10 minutos que antecede cada
-uma. O resultado se repete em três pacientes e nove crises, com treino e teste em
-pacientes diferentes (itens 8 e 9). Detalhes e ressalvas na seção
+uma. Em sete pacientes e 21 crises, com treino e teste em pacientes diferentes (itens 8
+a 11): sozinha, a topologia de um canal detecta 4 das 21 crises; com 21 canais, 12; o
+baseline clássico de um canal detecta 18, e somado à topologia detecta as 21. Nos
+pacientes novos (chb04, chb06, chb12) nem a amplitude de um canal destaca as crises:
+ali o que resolve é usar vários canais. Detalhes e ressalvas na seção
 [Resultados](#resultados).
 
 > O enunciado foi atualizado depois do `projetos_TDA.pdf` guardado aqui: a versão nova
@@ -24,19 +27,21 @@ pacientes diferentes (itens 8 e 9). Detalhes e ressalvas na seção
 ## Material de apresentação
 
 - `projeto5_tda_eeg_colab.ipynb`: o projeto inteiro em um notebook comentado, com as saídas salvas
-  (roda no Google Colab; a Seção 11 cobre os três pacientes e a definição supervisionada).
+  (roda no Google Colab; a Seção 11 cobre os três primeiros pacientes, chb01 a chb03, com 14
+  crises, e a definição supervisionada; os sete pacientes estão nos scripts 10 a 14).
 - `apresentacao_projeto5_tda.pptx`: slides, com notas do apresentador.
 
 ## Como executar
 
 ```
 python -m pip install -r requirements.txt
-python scripts/00_baixar_dados.py   # baixa 35 EDF do PhysioNet (1,5 GB) para dataset/
-python executar_tudo.py             # 20 a 25 min; grava tudo em resultados/
+python scripts/00_baixar_dados.py   # baixa 78 EDF do PhysioNet (3,7 GB) para dataset/
+python executar_tudo.py             # 50 a 60 min; grava tudo em resultados/
 ```
 
-Só a análise original do chb01 (7 EDF, 297 MB, 10 a 15 min): acrescente `--so-chb01`
-aos dois comandos.
+Só o estudo de caso do chb01 (7 EDF, 297 MB, 10 a 15 min): acrescente `--so-chb01`
+aos dois comandos. O estudo de caso (itens 1 a 7) usa sempre as mesmas 7 gravações,
+listadas em `tda_eeg/config.py`, mesmo que a pasta tenha o paciente inteiro.
 
 Os EDF não estão no repositório (são dados públicos do CHB-MIT); os resumos das crises
 (`dataset/chbXX-summary.txt`) estão.
@@ -59,8 +64,10 @@ anotadas em `chb01-summary.txt`.
 | chb01_06 | 16:43:26 | — |
 | chb01_09 | 19:43:56 | — |
 
-A análise multipaciente (itens 8 e 9 dos resultados) usa também chb02 (gravações
-01–19, 3 crises) e chb03 (gravações 01–08, 4 crises), com os mesmos parâmetros.
+A análise multipaciente (itens 8 a 11 dos resultados) usa sete pacientes, com os
+mesmos parâmetros: o chb01 inteiro (42 gravações, 7 crises), o chb02 (01–19, 3 crises),
+o chb03 (01–08, 4 crises), o chb04 (01–05, 1 crise) e uma gravação de cada um de chb06
+(3 crises), chb08 (1 crise) e chb12 (2 crises). São 92 h de EEG e 21 crises.
 
 Janelas de 8 s com passo de 4 s: 6 293 no total (chb01).
 
@@ -87,6 +94,8 @@ Janelas de 8 s com passo de 4 s: 6 293 no total (chb01).
 | Avançado: Mapper | `scripts/07` | Kepler Mapper com lente topológica e com lente de tempo relativo à crise |
 | Boas práticas | `scripts/01`, `08`, `executar_tudo.py` | Validação sintética, sensibilidade a canal e (d, τ), sementes fixas, `pip freeze` |
 | "Diferentes janelas e pacientes" | `scripts/10`, `11` | Mesmo pipeline em chb01, chb02 e chb03; uma linha do tempo por paciente |
+| Figuras para a apresentação | `scripts/13` | Seis figuras didáticas, com a leitura escrita na própria figura |
+| Além do enunciado: vários canais | `scripts/14` | O mesmo pipeline nos 21 canais, com os descritores juntos no modelo |
 | Supervisionada: unidade amostral | `tda_eeg/dados.py`, `scripts/12` | Uma janela = paciente, arquivo, canal e intervalo absoluto |
 | Supervisionada: rótulos | `scripts/12` | y=1 se a janela está totalmente contida na crise; y=0 se está a 1 h ou mais de qualquer crise; o resto fica sem rótulo |
 | Supervisionada: três classes | `scripts/12` | Pré-ictal em [ts − 600 s, ts); saída com 3 probabilidades e classe prevista |
@@ -211,66 +220,63 @@ caminho, sem ramificação na crise. Versões interativas:
 
 ![mapper](resultados/figuras/07_mapper_A.png)
 
-### 8. Extensão multipaciente (chb01, chb02, chb03)
+### 8. Extensão multipaciente (sete pacientes, 21 crises)
 
 Mesmo pipeline e mesmos parâmetros (FP1-F7, d=3, τ=4, janelas de 8 s com passo de
-4 s, mesmos rótulos), agora em 34 h de EEG de 3 pacientes com **9 crises** e 123
+4 s, mesmos rótulos), agora em 92 h de EEG de 7 pacientes com **21 crises** e 310
 janelas ictais. Com mais de um paciente dá para fazer a divisão treino/teste **por
 paciente** que o enunciado pede.
 
 ```
-python scripts/10_multipaciente_extrair.py   # ~9 min; um cache por paciente
-python scripts/11_multipaciente_analise.py   # ~1 min; saída em resultados/multipaciente/
+python scripts/10_multipaciente_extrair.py   # ~25 min; um cache por paciente
+python scripts/11_multipaciente_analise.py   # ~3 min; saída em resultados/multipaciente/
 ```
 
 | Paciente | Gravações | Horas | Crises | Janelas ictais |
 |---|---|---|---|---|
-| chb01 | 01–06, 09 | 7,0 | 2 | 18 |
+| chb01 | todas as 42 | 40,5 | 7 | 114 |
 | chb02 | 01–19 (com 16 e 16+) | 19,2 | 3 | 44 |
 | chb03 | 01–08 | 8,0 | 4 | 61 |
+| chb04 | 01–05 | 18,6 | 1 | 13 |
+| chb06 | 01 | 4,0 | 3 | 12 |
+| chb08 | 02 | 1,0 | 1 | 43 |
+| chb12 | 06 | 1,0 | 2 | 23 |
 
-O chb01 recalculado pelo código multipaciente é idêntico ao cache original
-(diferença máxima 0).
+As 7 gravações do estudo de caso, recalculadas pelo código multipaciente, são
+idênticas ao cache original (diferença máxima 0).
 
 **AUROC ictal × interictal das mesmas gravações** (comparação justa):
 
-| Descritor | chb01 | chb02 | chb03 |
-|---|---|---|---|
-| persistência máxima | 0,60 | 0,62 | 0,41 |
-| persistência total | 0,49 | 0,63 | 0,65 |
-| paisagem λ2 (L1) | 0,63 | 0,68 | 0,64 |
-| *baseline:* log-variância | 0,97 | 0,90 | 0,89 |
+| Descritor | chb01 | chb02 | chb03 | chb04 | chb06 | chb08 | chb12 |
+|---|---|---|---|---|---|---|---|
+| persistência máxima | 0,50 | 0,62 | 0,41 | 0,34 | 0,45 | 0,49 | 0,49 |
+| persistência total | 0,47 | 0,63 | 0,65 | 0,72 | 0,40 | 0,72 | 0,70 |
+| paisagem λ2 (L1) | 0,50 | 0,68 | 0,64 | 0,56 | 0,49 | 0,73 | 0,73 |
+| *baseline:* log-variância | 0,97 | 0,90 | 0,89 | 0,09 | 0,48 | 0,77 | 0,46 |
 
-- A persistência máxima não se destaca em nenhuma das 9 crises: o trecho ictal fica
-  entre os percentis 10 e 58 dos blocos interictais de mesma duração do paciente. No
-  chb03 ela até **cai** na crise. A log-variância fica entre os percentis 95 e 100 nas 9.
-- A paisagem λ2, o descritor mais promissor no chb01 (percentis 96 e 91), não se
-  repete: fica entre 40 e 59 nas 4 crises do chb03.
-- O "estado de 2 h" do chb01 não é um marcador geral. No chb02 há um platô parecido
-  de persistência total (horas 9 a 15), mas nenhuma crise cai nele.
+- **A persistência máxima não se destaca em nenhuma das 21 crises**: o trecho ictal
+  fica entre os percentis 10 e 68 dos blocos interictais de mesma duração do paciente.
+- **A amplitude de um canal não é universal.** Nos três primeiros pacientes a
+  log-variância destaca todas as crises (percentis 95 a 100). Nos novos, não: no chb04
+  a crise tem amplitude *menor* que o interictal da mesma gravação (AUROC 0,09), e no
+  chb06 e no chb12 ela fica no nível do interictal (percentis de 6 a 77). No total, a amplitude passa do percentil
+  90 em 15 das 21 crises; a topologia, em nenhuma.
+- A paisagem λ2 continua inconsistente: percentis de 56 a 93 no chb01, de 40 a 59 no
+  chb03 e de 79 a 98 no chb08 e no chb12.
 
-**Classificador (regressão logística), AUROC no paciente testado:**
+**Classificador (regressão logística), AUROC no paciente testado, deixa-um-paciente-fora:**
 
-| Descritores | Dentro do paciente (chb01 / 02 / 03) | Deixa-um-paciente-fora (chb01 / 02 / 03) |
-|---|---|---|
-| Topológico H1 | 0,79 / 0,58 / 0,56 | 0,73 / 0,62 / 0,58 |
-| Clássico: só forma | 0,88 / 0,76 / 0,87 | 0,86 / 0,82 / 0,70 |
-| Clássico: forma + amplitude | 0,99 / 0,92 / 0,99 | 0,99 / 0,98 / 0,98 |
-| Topológico + clássico | 0,98 / 0,90 / 0,99 | 0,98 / 0,98 / 0,98 |
+| Descritores | chb01 | chb02 | chb03 | chb04 | chb06 | chb08 | chb12 |
+|---|---|---|---|---|---|---|---|
+| Topológico H1 | 0,73 | 0,62 | 0,61 | 0,67 | 0,53 | 0,79 | 0,45 |
+| Clássico: só forma | 0,87 | 0,86 | 0,63 | 0,95 | 0,60 | 0,77 | 0,69 |
+| Clássico: forma + amplitude | 0,99 | 0,97 | 0,97 | 0,91 | 0,41 | 0,93 | 0,67 |
+| Topológico + clássico | 0,99 | 0,97 | 0,98 | 0,93 | 0,47 | 0,95 | 0,65 |
 
-Para detectar todas as crises do paciente testado, o modelo topológico dispara de 40 a
-136 alarmes falsos por hora entre pacientes; o clássico completo, de 0,4 a 2,5.
-
-A conclusão do chb01 se mantém e fica mais forte: com três pacientes e nove crises,
-H1 da reconstrução de Takens continua perto do acaso e abaixo do baseline que também
-ignora a amplitude. Somar a topologia ao baseline completo não muda a AUROC. A AUPRC,
-mais sensível com classes tão desbalanceadas, sobe um pouco nos três pacientes no
-esquema entre pacientes (0,46 → 0,52; 0,15 → 0,20; 0,47 → 0,63); com nove crises isso é
-um indício a conferir com mais dados, não um resultado.
-
-Ressalvas: o chb03 tem 7 crises e só as 4 das gravações 01–08 entraram; a crise de
-chb02_19 dura 9 s (2 janelas ictais) e a gravação seguinte (chb02_20) não está na
-base local, então o pós-ictal dela fica truncado.
+O baseline de um canal, quase perfeito nos três primeiros pacientes, cai para 0,41 no
+chb06 e 0,67 no chb12. A validação dentro do paciente (deixa-uma-gravação-fora) só é
+possível no chb01, chb02 e chb03, que têm mais de uma gravação com crise; os números
+são os mesmos de antes (topológico 0,74 / 0,58 / 0,56; clássico completo 0,99 / 0,92 / 0,99).
 
 ![multi AUROC](resultados/multipaciente/figuras/10_auroc_por_paciente.png)
 ![multi crises](resultados/multipaciente/figuras/10_crises_percentis.png)
@@ -280,68 +286,158 @@ base local, então o pós-ictal dela fica truncado.
 ### 9. Definição supervisionada do enunciado (rótulos estritos, avaliação por evento)
 
 ```
-python scripts/12_avaliacao_supervisionada.py   # ~1 min; usa os caches do script 10
+python scripts/12_avaliacao_supervisionada.py   # ~5 min; usa os caches do script 10
 ```
 
 Os itens 1 a 8 usam os rótulos fixados no início do projeto (ictal = pelo menos metade
 da janela na crise; interictal = tudo fora das faixas de 10 min). O script 12 refaz a
 detecção com a versão recomendada no enunciado:
 
-| Rótulo | Regra | Janelas (chb01 / 02 / 03) |
+| Rótulo | Regra | Janelas (chb01 / 02 / 03 / 04 / 06 / 08 / 12) |
 |---|---|---|
-| ictal (y=1) | janela totalmente contida na crise anotada | 14 / 38 / 53 |
-| interictal (y=0) | a 1 h ou mais de qualquer crise do paciente | 3 973 / 13 599 / 3 044 |
-| pré-ictal (só na extensão de 3 classes) | janela contida em [ts − 600 s, ts) | 297 / 442 / 531 |
+| ictal (y=1) | janela totalmente contida na crise anotada | 100 / 38 / 53 / 11 / 6 / 41 / 19 |
+| interictal (y=0) | a 1 h ou mais de qualquer crise do paciente | 26 221 / 13 599 / 3 044 / 15 445 / 0 / 0 / 0 |
+| pré-ictal (só na extensão de 3 classes) | janela contida em [ts − 600 s, ts) | 976 / 442 / 531 / 149 / 445 / 148 / 296 |
 | sem rótulo | cruza o início ou o fim da crise, pós-ictal, interictal próximo | fora do treino e das métricas por janela |
+
+chb06, chb08 e chb12 têm uma gravação só e nenhuma janela a 1 h das crises. Neles dá
+para medir a sensibilidade por crise, mas não a AUROC nem os alarmes falsos.
 
 O limiar de alarme é **fixado no treino**: o valor que deixa passar 1 % (ou 0,1 %) das
 janelas negativas de treino. Com passo de 4 s, 1 % equivale a cerca de 9 janelas
 positivas por hora.
 
-**Entre pacientes (deixa-um-paciente-fora), 9 crises no teste:**
+**Entre pacientes (deixa-um-paciente-fora), 21 crises no teste:**
 
-| Descritores | AUROC (chb01 / 02 / 03) | Crises detectadas, 1 % | Alarmes falsos/h, 1 % | Crises detectadas, 0,1 % | Alarmes falsos/h, 0,1 % |
-|---|---|---|---|---|---|
-| Topológico H1 | 0,77 / 0,61 / 0,44 | 2 de 9 | 3,9 / 12,5 / 9,2 | 0 de 9 | 0,5 / 0,9 / 2,4 |
-| Clássico: só forma | 0,90 / 0,79 / 0,76 | 4 de 9 | 3,4 / 33,2 / 2,4 | 0 de 9 | 0,0 / 3,3 / 0,3 |
-| Clássico: forma + amplitude | 0,99 / 0,99 / 1,00 | 9 de 9 | 31,7 / 7,3 / 0,0 | 8 de 9 | 0,9 / 2,9 / 0,0 |
-| Topológico + clássico | 1,00 / 0,99 / 1,00 | 9 de 9 | 32,4 / 24,3 / 0,3 | 9 de 9 | 1,4 / 2,9 / 0,0 |
+| Descritores | Crises detectadas, 1 % | Alarmes falsos/h, 1 % (chb01 / 02 / 03 / 04) | Crises detectadas, 0,1 % | Alarmes falsos/h, 0,1 % |
+|---|---|---|---|---|
+| Topológico H1 | 4 de 21 | 6,1 / 7,4 / 8,0 / 17,0 | 0 de 21 | 0,5 / 0,0 / 0,6 / 7,2 |
+| Clássico: só forma | 9 de 21 | 7,5 / 15,6 / 4,4 / 11,4 | 1 de 21 | 0,3 / 1,2 / 1,5 / 3,0 |
+| Clássico: forma + amplitude | 18 de 21 | 5,4 / 12,2 / 0,0 / 4,4 | 13 de 21 | 0,3 / 1,9 / 0,0 / 0,4 |
+| Topológico + clássico | 21 de 21 | 9,8 / 15,7 / 0,3 / 5,5 | 16 de 21 | 0,9 / 2,5 / 0,0 / 1,1 |
 
-- O modelo topológico detecta 2 das 9 crises no ponto de 1 % e nenhuma no de 0,1 %.
-- **A AUROC por janela engana.** O clássico completo tem AUROC de 0,99 no chb01 e
-  dispara 32 alarmes falsos por hora no ponto de 1 %: o limiar veio dos outros dois
-  pacientes e a amplitude do EEG muda de pessoa para pessoa.
-- O atraso mediano de detecção do clássico completo fica entre 5 e 29 s.
-- Com a topologia somada ao clássico, a crise que faltava no ponto de 0,1 % é detectada
-  e a AUPRC sobe (0,45 → 0,60; 0,10 → 0,48; 0,98 → 0,99), mas os alarmes falsos do chb02
-  no ponto de 1 % triplicam. O efeito é pequeno e misto; ver a ressalva do item 8.
+- Sozinho, o modelo topológico detecta 4 das 21 crises no ponto de 1 % e nenhuma no de 0,1 %.
+- O clássico completo perde 3 crises: duas do chb06 e uma do chb12, os pacientes em
+  que a amplitude deste canal não muda na crise.
+- O atraso mediano de detecção do clássico completo é de 9 s (1 %) e 14 s (0,1 %).
+
+**Somar a topologia ao baseline ajuda, e o ganho não é artefato.** Com os 15
+descritores de H1 somados aos 12 clássicos, as 21 crises são detectadas no ponto de
+1 %, incluídas as três que o clássico perde, e 16 no de 0,1 %. O preço é mais alarme
+falso (por exemplo, 5,4 → 9,8 por hora no chb01). No controle, os descritores de H1 são
+embaralhados dentro de cada paciente (20 repetições): se o ganho viesse só de ter mais
+colunas, a versão embaralhada ganharia o mesmo, e não ganha.
+
+| AUPRC entre pacientes | chb01 | chb02 | chb03 | chb04 |
+|---|---|---|---|---|
+| Clássico: forma + amplitude | 0,67 | 0,25 | 0,95 | 0,015 |
+| Clássico + topologia | 0,76 | 0,47 | 0,99 | 0,027 |
+| Clássico + topologia embaralhada (máximo de 20) | 0,67 | 0,28 | 0,96 | 0,023 |
+
+A topologia não serve de detector sozinha, mas não é redundante com os descritores
+clássicos. Com 21 crises, é um indício consistente, ainda não um resultado fechado.
 
 **Cronológica, no mesmo paciente** (treino até a gravação da crise ⌊n/2⌋, teste nas
 posteriores):
 
 | Paciente | Crises no teste | Topológico H1 | Clássico: forma + amplitude |
 |---|---|---|---|
-| chb01 | 1 | AUROC 0,92; 0 de 1 detectada | AUROC 0,99; 1 de 1; 27 alarmes falsos/h (1 %) e 8 (0,1 %) |
+| chb01 | 4 | AUROC 0,72; 2 de 4 detectadas (1 %) e 1 de 4 (0,1 %) | AUROC 1,00; 4 de 4; 24 alarmes falsos/h (1 %) e 7 (0,1 %) |
 | chb02 | 2 | AUROC 0,73; 0 de 2 | AUROC 0,94; 2 de 2; 16 alarmes falsos/h (1 %) e 7 (0,1 %) |
 | chb03 | 2 | não avaliável | não avaliável |
+| chb04, chb06, chb08, chb12 | — | não avaliável | não avaliável |
 
-- No chb01 a AUROC topológica de 0,92 vem do estado lento do item 3: com o interictal
-  restrito a janelas afastadas, a comparação volta a ser entre horas diferentes. Mesmo
-  assim a crise não é detectada.
-- O chb03 não é avaliável neste esquema: as gravações de treino (01 e 02) têm crise e
-  nenhuma janela delas fica a 1 h de uma crise. A regra não foi afrouxada depois de
-  ver os dados.
+O teste cronológico não é possível em cinco pacientes: no chb03 as gravações de treino
+não têm interictal a 1 h das crises; o chb04 e o chb08 têm uma crise só; o chb06 e o
+chb12 têm uma gravação só. A regra não foi afrouxada depois de ver os dados.
 
-**Três classes, entre pacientes.** Acurácia balanceada (acaso = 0,33): topológico de
-0,28 a 0,36; clássico completo de 0,49 a 0,59, porque acerta a classe ictal. A AUROC
-de "pré-ictal × resto" vai de 0,14 a 0,68 com a topologia e de 0,17 a 0,41 com o
-baseline: o que se aprende como pré-ictal em dois pacientes não vale no terceiro. Não
-há evidência de antecipação.
+**Três classes, entre pacientes.** Nos quatro pacientes com as três classes, a
+acurácia balanceada (acaso = 0,33) vai de 0,30 a 0,50 com a topologia e de 0,48 a 0,65
+com o clássico, que acerta a classe ictal. A AUROC de "pré-ictal × resto" vai de 0,29 a
+0,63 com a topologia e de 0,42 a 0,58 com o baseline, sem direção consistente entre
+pacientes. Não há evidência de antecipação.
 
 As saídas por janela (escore e classe prevista; 3 probabilidades na extensão) ficam em
 `resultados/multipaciente/tabelas/saida_*_por_janela.csv.gz`.
 
 ![detecção por evento](resultados/multipaciente/figuras/12_deteccao_por_evento.png)
+
+### 10. O estado lento em 40 horas e as figuras didáticas
+
+```
+python scripts/13_figuras_didaticas.py   # ~1 min; saída em resultados/didaticas/
+```
+
+O estudo de caso (item 3) encontrou um "estado" de cerca de 2 h, com persistência
+total alta, que continha as duas crises. Com o chb01 inteiro dá para ver o que ele é:
+
+- o estado (mediana móvel de 5 min da persistência total acima de 3,3) ocupa **46 % das
+  40 h** e aparece nas duas noites e no início da tarde;
+- **as 7 crises do paciente caem dentro dele**; se caíssem ao acaso, a chance seria de
+  0,46⁷ ≈ 0,5 %;
+- nas mesmas faixas a amplitude (log-variância) fica baixa.
+
+Sono é a hipótese mais plausível, mas não há hipnograma para confirmar. A leitura é a
+do item 3, agora com mais base: a persistência total acompanha um estado do cérebro em
+que as crises deste paciente acontecem; ela não marca a crise. Dentro do estado, o
+trecho da crise não se destaca (AUROC 0,47 contra o interictal das mesmas gravações),
+e o chb02 tem um platô igual, à noite, sem nenhuma crise dentro.
+
+![40 h do chb01](resultados/didaticas/D6_linha_do_tempo_chb01.png)
+
+As outras figuras de `resultados/didaticas/` foram feitas para a apresentação, com a
+leitura escrita na própria figura:
+
+| Figura | O que explica |
+|---|---|
+| `D1_como_ler_diagrama.png` | do laço à barra e ao ponto do diagrama de persistência |
+| `D2_expectativa_realidade.png` | o que a hipótese previa × o que o EEG mostra na crise |
+| `D3_o_que_e_auroc.png` | a AUROC, com as janelas do estudo de caso |
+| `D4_todas_as_crises.png` | as 21 crises, uma por linha: topologia × amplitude |
+| `D5_crises_detectadas.png` | treino e teste por paciente: uma bolinha por crise |
+
+![como ler](resultados/didaticas/D1_como_ler_diagrama.png)
+![expectativa e realidade](resultados/didaticas/D2_expectativa_realidade.png)
+![AUROC](resultados/didaticas/D3_o_que_e_auroc.png)
+![todas as crises](resultados/didaticas/D4_todas_as_crises.png)
+![crises detectadas](resultados/didaticas/D5_crises_detectadas.png)
+
+### 11. Vários canais ao mesmo tempo
+
+```
+python scripts/14_multicanal.py   # ~12 min (Ripser); usa todos os EDF
+```
+
+O enunciado pede um canal. Como extensão, o mesmo pipeline (Takens d=3, τ=4 → Rips →
+H1) foi aplicado a cada um dos 21 canais bipolares distintos, nos sete pacientes, e os
+descritores entraram juntos no modelo. Duas formas de juntar: **concatenados** (uma
+coluna por canal e descritor) e **agregados** (média, máximo, mínimo e desvio-padrão de
+cada descritor entre os canais, o que não depende de qual canal é qual). Rótulos,
+partições e limiar são os do item 9.
+
+| Descritores (teste no paciente que ficou de fora) | Crises detectadas, 1 % | Alarmes falsos/h, 1 % (chb01 / 02 / 03 / 04) | Crises detectadas, 0,1 % |
+|---|---|---|---|
+| Topologia, 1 canal (FP1-F7) | 4 de 21 | 6 / 7 / 8 / 17 | 0 de 21 |
+| Topologia, 21 canais concatenados | 9 de 21 | 12 / 11 / 28 / 22 | 1 de 21 |
+| Topologia, 21 canais agregados | 12 de 21 | 4 / 11 / 21 / 8 | 0 de 21 |
+| Clássico só forma, 21 canais agregados | 14 de 21 | 11 / 17 / 6 / 10 | 0 de 21 |
+| Clássico com amplitude, 1 canal (FP1-F7) | 18 de 21 | 5 / 12 / 0 / 4 | 13 de 21 |
+| Clássico com amplitude, 21 canais agregados | 21 de 21 | 33 / 45 / 0 / 3 | 21 de 21 |
+| Topologia + clássico, 21 canais agregados | 21 de 21 | 20 / 52 / 0 / 5 | 21 de 21 |
+
+- **Vários canais triplicam o que a topologia detecta**: de 4 para 12 crises. A forma
+  agregada se transfere melhor entre pacientes que a concatenada, que decora o treino
+  (AUROC de treino 0,95).
+- **Continua longe do baseline**: no limiar mais rígido (0,1 %) a topologia agregada
+  não detecta nenhuma crise, e o clássico com 21 canais detecta as 21.
+- **Vários canais resolvem os pacientes difíceis**: as crises do chb06 e do chb12, que
+  o clássico de um canal perde, são detectadas com os 21 canais. O custo são mais
+  alarmes falsos no chb01 e no chb02.
+- **Nenhum canal sozinho resolve com a topologia**: a AUROC da persistência máxima vai
+  de 0,38 a 0,64 entre os 21 canais nos quatro pacientes em que dá para medir; a da
+  log-variância, de 0,68 a 1,00.
+
+![multicanal](resultados/multipaciente/figuras/14_multicanal_crises.png)
 
 ## Animações
 
@@ -357,18 +453,23 @@ As saídas por janela (escore e classe prevista; 3 probabilidades na extensão) 
 
 ## Limitações
 
-- **Três pacientes, nove crises.** Nada aqui é confirmatório; o CHB-MIT tem 24 casos.
-  Os itens 1 a 7 usam só o chb01, com divisão por gravação (generalização para outras
-  horas do mesmo paciente); a divisão por paciente está nos itens 8 e 9. A previsão
-  com alarmes (item 6) e o Mapper (item 7) continuam só no chb01.
+- **Sete pacientes, 21 crises.** Nada aqui é confirmatório; o CHB-MIT tem 24 casos.
+  Três dos sete pacientes entram com uma gravação só, o que impede medir neles a AUROC
+  e os alarmes falsos com a regra de 1 h.
+  Os itens 1 a 7 usam só 7 h do chb01, com divisão por gravação (generalização para
+  outras horas do mesmo paciente); a divisão por paciente está nos itens 8 e 9. A
+  previsão com alarmes (item 6), o Mapper (item 7) e a sensibilidade a canal e (d, τ)
+  (item 5) continuam só nessas 7 h. Do chb03 entraram 4 das 7 crises; do chb04, 1 de 4;
+  do chb06, 3 de 10; do chb08, 1 de 5; do chb12, 2 de 40.
 - **Janelas correlacionadas.** Janelas vizinhas se sobrepõem em 50 %; por isso os
   resultados são dados como AUROC e percentis de blocos, não como valores-p de testes
   que supõem independência. A faixa de erro das paisagens médias é otimista.
 - **"Interictal" frouxo nos itens 1 a 8.** Qualquer janela fora das faixas
   pré/pós-ictais conta como interictal. O item 9 exige 1 h de distância, ainda menos
   que as 4 h comuns na literatura.
-- **Um canal por vez.** A crise pode ter foco longe do canal analisado; o item 5
-  cobre os outros canais só de forma univariada.
+- **Um canal por vez nos itens 1 a 10.** A crise pode ter foco longe do canal
+  analisado; o item 5 cobre os outros canais de forma univariada e o item 11 junta os
+  21 no mesmo modelo, mas só com agregações simples entre canais.
 - **Nuvens de 126 pontos** (subamostragem de 4): ciclos mais finos que isso não são
   resolvidos.
 - **Sem rejeição de artefatos.** Piscadas e movimentos entram nas janelas e geram

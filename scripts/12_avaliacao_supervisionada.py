@@ -135,8 +135,11 @@ def particoes(df, crises):
         out.append(("entre pacientes", pac, ~teste, teste))
     for pac, cs in crises.items():
         k = len(cs) // 2                                  # floor(n/2) crises no treino
-        ultima = df.loc[df.gravacao == cs[k - 1][1], "ordem_grav"].iloc[0]
         m = (df.paciente == pac).to_numpy()
+        if k == 0:                                        # uma crise só: não há o que treinar antes dela
+            out.append(("cronológica (mesmo paciente)", pac, np.zeros(len(df), bool), m))
+            continue
+        ultima = df.loc[df.gravacao == cs[k - 1][1], "ordem_grav"].iloc[0]
         treino = m & (df.ordem_grav <= ultima).to_numpy()
         teste = m & (df.ordem_grav > ultima).to_numpy()
         out.append(("cronológica (mesmo paciente)", pac, treino, teste))
@@ -190,12 +193,14 @@ def deteccao(df, crises):
         base = {"esquema": esquema, "paciente_teste": pac,
                 "ictais_treino": int((y[tr] == 1).sum()), "interictais_treino": int((y[tr] == 0).sum()),
                 "ictais_teste": int((y[te] == 1).sum()), "interictais_teste": int((y[te] == 0).sum())}
-        if base["ictais_treino"] == 0 or base["interictais_treino"] == 0:
-            # sem as duas classes no treino não há modelo: registrado, não contornado
+        if base["ictais_treino"] == 0 or base["interictais_treino"] == 0 or base["ictais_teste"] == 0:
+            # sem as duas classes no treino não há modelo, e sem crise no teste não há o que detectar:
+            # registrado, não contornado
+            motivo = ("teste sem crises (não há gravações posteriores)" if base["ictais_teste"] == 0
+                      else "treino sem janelas das duas classes")
             for nome_c in CONJUNTOS:
-                linhas.append({**base, "descritores": nome_c,
-                               "obs": "não avaliável: treino sem janelas das duas classes"})
-            print(f"  {esquema:30s} {pac}: não avaliável (treino com "
+                linhas.append({**base, "descritores": nome_c, "obs": "não avaliável: " + motivo})
+            print(f"  {esquema:30s} {pac}: não avaliável ({motivo}; treino com "
                   f"{base['ictais_treino']} ictais e {base['interictais_treino']} interictais)")
             continue
         for nome_c, cols in CONJUNTOS.items():
@@ -207,7 +212,8 @@ def deteccao(df, crises):
             r0 = {**base, "descritores": nome_c,
                   "prevalencia_teste": float(y[te].mean()) if te.any() else np.nan,
                   "auroc": roc_auc_score(y[te], s[te]) if 0 < y[te].sum() < te.sum() else np.nan,
-                  "auprc": average_precision_score(y[te], s[te]) if y[te].sum() > 0 else np.nan}
+                  # paciente sem interictal a 1 h das crises: só as métricas por evento fazem sentido
+                  "auprc": average_precision_score(y[te], s[te]) if 0 < y[te].sum() < te.sum() else np.nan}
             prev_cols = {}
             for fpr in FPRS_TREINO:
                 limiar = float(np.quantile(neg_tr, 1 - fpr))
@@ -226,6 +232,50 @@ def deteccao(df, crises):
             f"{r['crises_detectadas']}/{r['crises_teste']} FA/h {r['fa_h']:.1f}"
             for r in linhas[-2 * len(CONJUNTOS):]), flush=True)
     return pd.DataFrame(linhas), pd.DataFrame(por_crise), pd.concat(saidas, ignore_index=True)
+
+
+# ---------------------------------------------------------------------------
+# Controle: o ganho de somar a topologia ao baseline é real?
+# ---------------------------------------------------------------------------
+
+def controle_embaralhado(df, n_rep=20):
+    """AUPRC entre pacientes do baseline, do baseline + topologia e do baseline + topologia
+    EMBARALHADA (as linhas dos descritores de H1 são permutadas dentro de cada paciente).
+
+    Se o ganho viesse só de ter mais 15 colunas, a versão embaralhada ganharia o mesmo.
+    """
+    y = df.y_det.to_numpy()
+    rot = np.isfinite(y)
+    XB = df[baseline.COLUNAS_BASE].to_numpy(float)
+    XT = df[topologia.COLUNAS_TOPO].to_numpy(float)
+    pacs = list(cfg.PACIENTES_MULTI)
+
+    def auprc(X):
+        saida = {}
+        for pac in pacs:
+            teste = (df.paciente == pac).to_numpy()
+            m = clone(modelo()).fit(X[~teste & rot], y[~teste & rot])
+            tt = teste & rot
+            saida[pac] = (average_precision_score(y[tt], m.predict_proba(X[tt])[:, 1])
+                          if 0 < y[tt].sum() < tt.sum() else np.nan)      # precisa das duas classes no teste
+        return saida
+
+    base, com_topo = auprc(XB), auprc(np.c_[XB, XT])
+    rng = np.random.default_rng(cfg.SEMENTE)
+    reps = []
+    for _ in range(n_rep):
+        XS = XT.copy()
+        for pac in pacs:
+            idx = np.flatnonzero((df.paciente == pac).to_numpy())
+            XS[idx] = XT[rng.permutation(idx)]
+        reps.append(auprc(np.c_[XB, XS]))
+    reps = pd.DataFrame(reps)
+    return pd.DataFrame({"paciente_teste": pacs,
+                         "auprc_classico": [base[p] for p in pacs],
+                         "auprc_classico_mais_topologia": [com_topo[p] for p in pacs],
+                         "auprc_topologia_embaralhada_media": [reps[p].mean() for p in pacs],
+                         "auprc_topologia_embaralhada_max": [reps[p].max() for p in pacs],
+                         "repeticoes": n_rep})
 
 
 # ---------------------------------------------------------------------------
@@ -252,8 +302,9 @@ def tres_classes(df):
             r = {"descritores": nome_c, "paciente_teste": pac,
                  "acuracia_balanceada": balanced_accuracy_score(c3[mm], prev[mm])}
             for j, c in enumerate(CLASSES3):
-                r[f"auroc_{c}_vs_resto"] = roc_auc_score(c3[mm] == c, proba[mm, j])
-                r[f"n_{c}"] = int((c3[mm] == c).sum())
+                n_c = int((c3[mm] == c).sum())
+                r[f"auroc_{c}_vs_resto"] = roc_auc_score(c3[mm] == c, proba[mm, j]) if 0 < n_c < mm.sum() else np.nan
+                r[f"n_{c}"] = n_c
             linhas.append(r)
         matrizes[nome_c] = confusion_matrix(c3[rot].astype(str), prev[rot].astype(str),
                                             labels=CLASSES3).tolist()
@@ -275,9 +326,9 @@ def tres_classes(df):
 def figura(tab):
     nomes = list(CONJUNTOS)
     esquemas = ["entre pacientes", "cronológica (mesmo paciente)"]
-    cores = {"chb01": estilo.AZUL, "chb02": estilo.AGUA, "chb03": estilo.VIOLETA}
-    marcas = {"chb01": "o", "chb02": "s", "chb03": "D"}
-    fig, eixos = plt.subplots(2, 2, figsize=(12.5, 7.2), sharey=True, constrained_layout=True)
+    cores, marcas = estilo.COR_PACIENTE, estilo.MARCA_PACIENTE
+    n_pac = len(cfg.PACIENTES_MULTI)
+    fig, eixos = plt.subplots(2, 2, figsize=(13.5, 8.6), sharey=True, constrained_layout=True)
     yy = np.arange(len(nomes))[::-1]
     tab = tab[tab.fpr_treino.notna()]
     for i, esq in enumerate(esquemas):
@@ -295,7 +346,7 @@ def figura(tab):
                         v = 100 * sub.crises_detectadas / sub.crises_teste
                     else:
                         v = sub.fa_h.clip(lower=0.05)
-                    desloc = (k - 1) * 0.2 + (0.06 if cheio else -0.06)
+                    desloc = (k - (n_pac - 1) / 2) * min(0.2, 0.8 / n_pac) + (0.035 if cheio else -0.035)
                     ax.scatter(v.loc[nomes], yy + desloc, s=50, marker=marcas[pac],
                                facecolor=cores[pac] if cheio else "none", edgecolor=cores[pac],
                                linewidths=1.3, zorder=3,
@@ -319,7 +370,7 @@ def main():
     estilo.aplicar()
     DIR_FIG.mkdir(parents=True, exist_ok=True)
     DIR_TAB.mkdir(parents=True, exist_ok=True)
-    gravs = dados.listar_gravacoes(pacientes=cfg.PACIENTES_MULTI)
+    gravs = dados.listar_gravacoes(pacientes=cfg.PACIENTES_MULTI, restringir=None)
     crises = crises_por_paciente(gravs)
     df = rotular(carregar(gravs), crises)
 
@@ -333,7 +384,7 @@ def main():
     print(cont.to_string(), "\n")
 
     for esq, pac, tr, te in particoes(df, crises):
-        if esq.startswith("cron"):
+        if esq.startswith("cron") and tr.any() and te.any():
             print(f"  partição cronológica {pac}: treino {sorted(df.gravacao[tr].unique())[-1]} e "
                   f"anteriores | teste {', '.join(sorted(df.gravacao[te].unique()))}")
     print()
@@ -345,6 +396,10 @@ def main():
     pd.set_option("display.width", 250)
     print("\n" + tab.drop(columns=["limiar", "horas_interictais_teste"], errors="ignore")
           .round(3).to_string(index=False))
+
+    ctrl = controle_embaralhado(df)
+    ctrl.round(4).to_csv(DIR_TAB / "controle_topologia.csv", index=False)
+    print("\nControle (AUPRC entre pacientes):\n" + ctrl.round(3).to_string(index=False))
 
     print()
     t3, matrizes, saida3 = tres_classes(df)

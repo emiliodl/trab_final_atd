@@ -1,8 +1,8 @@
 """Executa o projeto inteiro, na ordem. Uso: python executar_tudo.py
 
-Tempo aproximado em uma máquina de 32 núcleos: 20 a 25 minutos (as extrações com o
-GUDHI, scripts 03 e 10, são as etapas mais demoradas). As etapas 10-12 (multipaciente)
-precisam dos EDF de chb02 e chb03; use --so-chb01 para rodar só a análise original.
+Tempo aproximado em uma máquina de 32 núcleos: 50 a 60 minutos (as extrações com o
+GUDHI, scripts 03 e 10, são as etapas mais demoradas). As etapas 10-14 (multipaciente)
+precisam de todos os EDF; use --so-chb01 para rodar só o estudo de caso (scripts 01-09).
 """
 import subprocess
 import sys
@@ -25,6 +25,8 @@ ETAPAS_MULTI = [
     "10_multipaciente_extrair.py",
     "11_multipaciente_analise.py",
     "12_avaliacao_supervisionada.py",
+    "13_figuras_didaticas.py",
+    "14_multicanal.py",
 ]
 
 

@@ -21,7 +21,7 @@ def main():
     refazer = "--refazer" in sys.argv
     for pac in cfg.PACIENTES_MULTI:
         t0 = time.time()
-        gs = dados.listar_gravacoes(pacientes=(pac,))
+        gs = dados.listar_gravacoes(pacientes=(pac,), restringir=None)
         n_crises = sum(len(g.crises) for g in gs)
         print(f"\n[{pac}] {len(gs)} gravações, {n_crises} crises", flush=True)
         df = extracao.extrair_ou_carregar(gs, rotulo=rotulo(pac), refazer=refazer)

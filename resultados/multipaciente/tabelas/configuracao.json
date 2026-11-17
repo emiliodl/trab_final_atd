@@ -2,7 +2,11 @@
   "pacientes": [
     "chb01",
     "chb02",
-    "chb03"
+    "chb03",
+    "chb04",
+    "chb06",
+    "chb08",
+    "chb12"
   ],
   "canal": "FP1-F7",
   "d": 3,

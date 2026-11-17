@@ -73,17 +73,24 @@ def _abrir(caminho):
         return mne.io.read_raw_edf(caminho, preload=False, verbose=False)
 
 
-def listar_gravacoes(pasta=cfg.DIR_DADOS, pacientes=cfg.PACIENTES):
+def listar_gravacoes(pasta=cfg.DIR_DADOS, pacientes=cfg.PACIENTES, restringir=cfg.GRAVACOES_ESTUDO):
     """Gravações .edf dos `pacientes`, em ordem cronológica, com as crises.
 
     Cada paciente tem a própria linha do tempo (inicio_abs relativo à primeira
-    gravação dele) e as crises vêm do respectivo chbXX-summary.txt.
+    gravação dele) e as crises vêm do respectivo chbXX-summary.txt. Só entram
+    arquivos que constam no resumo (cópias como "chb01_24 (1).edf" ficam de fora).
+
+    `restringir` = {paciente: nomes} limita as gravações de um paciente; o padrão é o
+    conjunto do estudo de caso. Use restringir=None para todas as gravações presentes.
     """
     saida = []
     for pac in pacientes:
         crises = ler_resumo(Path(pasta) / f"{pac}-summary.txt")
+        so = set((restringir or {}).get(pac, ())) or None
         brutas = []
         for caminho in sorted(Path(pasta).glob(f"{pac}_*.edf")):
+            if caminho.name not in crises or (so and caminho.stem not in so):
+                continue
             raw = _abrir(caminho)
             brutas.append((caminho, raw.info["meas_date"], raw.n_times / raw.info["sfreq"]))
         if not brutas:

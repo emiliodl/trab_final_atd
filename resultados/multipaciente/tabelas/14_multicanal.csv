@@ -1,0 +1,50 @@
+descritores,n_colunas,paciente_teste,auroc,auprc,auroc_treino,crises_detectadas_0.01,fa_h_0.01,crises_teste,crises_detectadas_0.001,fa_h_0.001
+"Topologia, 1 canal (FP1-F7)",15,chb01,0.7801,0.011,0.6568,1,6.0753,7,0,0.5149
+"Topologia, 1 canal (FP1-F7)",15,chb02,0.6156,0.0044,0.7388,1,7.3461,3,0,0.0
+"Topologia, 1 canal (FP1-F7)",15,chb03,0.5247,0.018,0.7406,0,7.9829,4,0,0.5913
+"Topologia, 1 canal (FP1-F7)",15,chb04,0.7758,0.0024,0.7232,1,17.0152,1,0,7.2256
+"Topologia, 1 canal (FP1-F7)",15,chb06,,,0.7165,0,,3,0,
+"Topologia, 1 canal (FP1-F7)",15,chb08,,,0.7319,0,,1,0,
+"Topologia, 1 canal (FP1-F7)",15,chb12,,,0.7231,1,,2,0,
+"Topologia, 21 canais concatenados",315,chb01,0.7935,0.0152,0.9533,5,12.3222,7,1,1.6475
+"Topologia, 21 canais concatenados",315,chb02,0.6924,0.0077,0.9574,1,11.0523,3,0,0.8604
+"Topologia, 21 canais concatenados",315,chb03,0.5757,0.0217,0.9585,1,28.3837,4,0,0.2957
+"Topologia, 21 canais concatenados",315,chb04,0.8398,0.0025,0.9493,1,22.4927,1,0,11.9456
+"Topologia, 21 canais concatenados",315,chb06,,,0.9466,0,,3,0,
+"Topologia, 21 canais concatenados",315,chb08,,,0.9482,1,,1,0,
+"Topologia, 21 canais concatenados",315,chb12,,,0.9497,0,,2,0,
+"Topologia, 21 canais agregados",60,chb01,0.8768,0.0587,0.8619,6,3.8442,7,0,0.1373
+"Topologia, 21 canais agregados",60,chb02,0.7859,0.0102,0.9,2,10.7876,3,0,0.2647
+"Topologia, 21 canais agregados",60,chb03,0.5712,0.0211,0.9086,1,21.2878,4,0,0.887
+"Topologia, 21 canais agregados",60,chb04,0.8467,0.0034,0.8861,1,7.8666,1,0,4.8365
+"Topologia, 21 canais agregados",60,chb06,,,0.8872,0,,3,0,
+"Topologia, 21 canais agregados",60,chb08,,,0.8811,1,,1,0,
+"Topologia, 21 canais agregados",60,chb12,,,0.8905,1,,2,0,
+"Clássico só forma, 21 canais agregados",36,chb01,0.8394,0.0141,0.9473,3,10.8463,7,0,0.1716
+"Clássico só forma, 21 canais agregados",36,chb02,0.8632,0.0154,0.9566,3,17.0086,3,0,3.4414
+"Clássico só forma, 21 canais agregados",36,chb03,0.7404,0.086,0.9614,4,5.6176,4,0,0.0
+"Clássico só forma, 21 canais agregados",36,chb04,0.9189,0.0046,0.951,1,10.4306,1,0,4.8365
+"Clássico só forma, 21 canais agregados",36,chb06,,,0.9516,0,,3,0,
+"Clássico só forma, 21 canais agregados",36,chb08,,,0.9435,1,,1,0,
+"Clássico só forma, 21 canais agregados",36,chb12,,,0.965,2,,2,0,
+"Clássico com amplitude, 1 canal (FP1-F7)",12,chb01,0.9954,0.6722,0.9769,7,5.3545,7,5,0.3432
+"Clássico com amplitude, 1 canal (FP1-F7)",12,chb02,0.9847,0.2454,0.9847,3,12.1774,3,3,1.9193
+"Clássico com amplitude, 1 canal (FP1-F7)",12,chb03,0.9963,0.9529,0.9797,4,0.0,4,4,0.0
+"Clássico com amplitude, 1 canal (FP1-F7)",12,chb04,0.9622,0.0154,0.982,1,4.3703,1,0,0.4079
+"Clássico com amplitude, 1 canal (FP1-F7)",12,chb06,,,0.9833,1,,3,0,
+"Clássico com amplitude, 1 canal (FP1-F7)",12,chb08,,,0.9845,1,,1,1,
+"Clássico com amplitude, 1 canal (FP1-F7)",12,chb12,,,0.9895,1,,2,0,
+"Clássico com amplitude, 21 canais agregados",48,chb01,0.9971,0.8971,0.9993,7,33.0193,7,7,7.4826
+"Clássico com amplitude, 21 canais agregados",48,chb02,0.9999,0.987,0.9991,3,44.8048,3,3,4.1694
+"Clássico com amplitude, 21 canais agregados",48,chb03,0.9948,0.9634,0.9996,4,0.0,4,4,0.0
+"Clássico com amplitude, 21 canais agregados",48,chb04,0.9285,0.0053,0.9996,1,2.5639,1,1,1.6316
+"Clássico com amplitude, 21 canais agregados",48,chb06,,,0.9992,3,,3,3,
+"Clássico com amplitude, 21 canais agregados",48,chb08,,,0.9992,1,,1,1,
+"Clássico com amplitude, 21 canais agregados",48,chb12,,,0.9997,2,,2,2,
+"Topologia + clássico, 21 canais agregados",108,chb01,0.9996,0.9472,0.9997,7,19.5645,7,7,5.1485
+"Topologia + clássico, 21 canais agregados",108,chb02,0.9974,0.951,0.9998,3,52.4156,3,3,9.133
+"Topologia + clássico, 21 canais agregados",108,chb03,0.9971,0.983,0.9999,4,0.0,4,4,0.0
+"Topologia + clássico, 21 canais agregados",108,chb04,0.947,0.007,0.9999,1,5.361,1,1,5.361
+"Topologia + clássico, 21 canais agregados",108,chb06,,,0.9998,3,,3,3,
+"Topologia + clássico, 21 canais agregados",108,chb08,,,0.9997,1,,1,1,
+"Topologia + clássico, 21 canais agregados",108,chb12,,,0.9999,2,,2,2,

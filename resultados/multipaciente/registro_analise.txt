@@ -1,16 +1,20 @@
           gravacoes  janelas  ictal  interictal  pos-ictal  pre-ictal  transicao  horas  crises
 paciente                                                                                       
-chb01             7     6293     18        5676        297        300          2    7.0       2
+chb01            42    36454    114       34303       1042        987          8   40.5       7
 chb02            20    17319     44       16473        351        447          4   19.2       3
-chb03             8     7192     61        5989        600        536          6    8.0       4 
+chb03             8     7192     61        5989        600        536          6    8.0       4
+chb04             5    16778     13       16464        150        150          1   18.6       1
+chb06             1     3605     12        2690        450        450          3    4.0       3
+chb08             1      899     43         554        150        150          2    1.0       1
+chb12             1      900     23         385        188        300          4    1.0       2 
 
 paciente     descritor  n_ictal  n_interictal  auc_ictal_todas  auc_ictal_mesmas  auc_pre_todas  auc_pre_mesmas
-   chb01   h1_pers_max       18          5676             0.60              0.60           0.52            0.48
-   chb01 h1_pers_total       18          5676             0.75              0.49           0.78            0.56
-   chb01   h1_entropia       18          5676             0.58              0.37           0.72            0.55
-   chb01   h1_pais2_l1       18          5676             0.82              0.63           0.77            0.56
-   chb01    bottleneck       18          5676             0.43              0.53           0.39            0.47
-   chb01 log_variancia       18          5676             0.84              0.97           0.20            0.36
+   chb01   h1_pers_max      114         34303             0.54              0.50           0.52            0.48
+   chb01 h1_pers_total      114         34303             0.66              0.47           0.69            0.52
+   chb01   h1_entropia      114         34303             0.57              0.45           0.65            0.53
+   chb01   h1_pais2_l1      114         34303             0.68              0.50           0.70            0.53
+   chb01    bottleneck      114         34303             0.43              0.48           0.44            0.48
+   chb01 log_variancia      114         34303             0.93              0.97           0.40            0.53
    chb02   h1_pers_max       44         16473             0.53              0.62           0.44            0.50
    chb02 h1_pers_total       44         16473             0.65              0.63           0.30            0.27
    chb02   h1_entropia       44         16473             0.61              0.51           0.36            0.28
@@ -22,54 +26,122 @@ paciente     descritor  n_ictal  n_interictal  auc_ictal_todas  auc_ictal_mesmas
    chb03   h1_entropia       61          5989             0.59              0.68           0.40            0.50
    chb03   h1_pais2_l1       61          5989             0.51              0.64           0.39            0.49
    chb03    bottleneck       61          5989             0.47              0.40           0.52            0.46
-   chb03 log_variancia       61          5989             0.96              0.89           0.68            0.51 
+   chb03 log_variancia       61          5989             0.96              0.89           0.68            0.51
+   chb04   h1_pers_max       13         16464             0.50              0.34           0.49            0.36
+   chb04 h1_pers_total       13         16464             0.63              0.72           0.30            0.40
+   chb04   h1_entropia       13         16464             0.57              0.84           0.32            0.59
+   chb04   h1_pais2_l1       13         16464             0.62              0.56           0.34            0.35
+   chb04    bottleneck       13         16464             0.48              0.39           0.54            0.45
+   chb04 log_variancia       13         16464             0.68              0.09           0.81            0.31
+   chb06   h1_pers_max       12          2690             0.45              0.45           0.51            0.51
+   chb06 h1_pers_total       12          2690             0.40              0.40           0.50            0.50
+   chb06   h1_entropia       12          2690             0.37              0.37           0.48            0.48
+   chb06   h1_pais2_l1       12          2690             0.49              0.49           0.49            0.49
+   chb06    bottleneck       12          2690             0.49              0.49           0.52            0.52
+   chb06 log_variancia       12          2690             0.48              0.48           0.46            0.46
+   chb08   h1_pers_max       43           554             0.49              0.49           0.53            0.53
+   chb08 h1_pers_total       43           554             0.72              0.72           0.38            0.38
+   chb08   h1_entropia       43           554             0.65              0.65           0.40            0.40
+   chb08   h1_pais2_l1       43           554             0.73              0.73           0.32            0.32
+   chb08    bottleneck       43           554             0.42              0.42           0.60            0.60
+   chb08 log_variancia       43           554             0.77              0.77           0.56            0.56
+   chb12   h1_pers_max       23           385             0.49              0.49           0.52            0.52
+   chb12 h1_pers_total       23           385             0.70              0.70           0.57            0.57
+   chb12   h1_entropia       23           385             0.64              0.64           0.53            0.53
+   chb12   h1_pais2_l1       23           385             0.73              0.73           0.57            0.57
+   chb12    bottleneck       23           385             0.31              0.31           0.47            0.47
+   chb12 log_variancia       23           385             0.46              0.46           0.47            0.47 
 
 descritor        bottleneck  h1_entropia  h1_pais2_l1  h1_pers_max  h1_pers_total  log_variancia
 crise                                                                                           
-chb01_03@2996s         29.0         70.0         96.0         58.0           82.0           99.0
-chb01_04@1467s         31.0         61.0         91.0         56.0           78.0           96.0
+chb01_03@2996s         34.0         61.0         93.0         58.0           73.0           98.0
+chb01_04@1467s         35.0         49.0         85.0         57.0           68.0           96.0
+chb01_15@1732s         27.0         67.0         74.0         64.0           74.0           97.0
+chb01_16@1015s          5.0         59.0         70.0         17.0           61.0          100.0
+chb01_18@1720s         54.0         49.0         56.0         54.0           55.0          100.0
+chb01_21@327s          23.0         68.0         65.0         35.0           66.0          100.0
+chb01_26@1862s         13.0         85.0         90.0         39.0           96.0          100.0
 chb02_16+@2972s        40.0         85.0         90.0         54.0           88.0           97.0
 chb02_16@130s          11.0         59.0         69.0         27.0           68.0           98.0
 chb02_19@3369s         77.0         59.0         45.0         34.0           51.0           95.0
 chb03_01@362s          49.0         55.0         50.0         34.0           55.0           95.0
 chb03_02@731s          57.0         53.0         46.0         34.0           59.0           99.0
 chb03_03@432s          31.0         65.0         40.0         10.0           42.0          100.0
-chb03_04@2162s         36.0         80.0         59.0         13.0           61.0           96.0 
+chb03_04@2162s         36.0         80.0         59.0         13.0           61.0           96.0
+chb04_05@7804s         51.0         59.0         67.0         50.0           67.0           71.0
+chb06_01@13525s        66.0         16.0         46.0         42.0           21.0            6.0
+chb06_01@1724s         47.0         13.0         56.0         39.0           25.0           49.0
+chb06_01@7461s         15.0         61.0         37.0         16.0           38.0           77.0
+chb08_02@2670s         14.0         86.0         98.0         16.0           86.0          100.0
+chb12_06@1665s          0.0         79.0         79.0         12.0           70.0           47.0
+chb12_06@3415s         10.0         92.0         95.0         68.0           98.0           48.0 
 
-  dentro do paciente   Topológico H1                chb01 0.79  chb02 0.58  chb03 0.56
-  entre pacientes      Topológico H1                chb01 0.73  chb02 0.62  chb03 0.58
-  dentro do paciente   Clássico: só forma           chb01 0.88  chb02 0.76  chb03 0.87
-  entre pacientes      Clássico: só forma           chb01 0.86  chb02 0.82  chb03 0.70
-  dentro do paciente   Clássico: forma + amplitude  chb01 0.99  chb02 0.92  chb03 0.99
-  entre pacientes      Clássico: forma + amplitude  chb01 0.99  chb02 0.98  chb03 0.98
-  dentro do paciente   Topológico + clássico        chb01 0.98  chb02 0.90  chb03 0.99
-  entre pacientes      Topológico + clássico        chb01 0.98  chb02 0.98  chb03 0.98
+  dentro do paciente   Topológico H1                chb01 0.74  chb02 0.58  chb03 0.56  chb04 nan  chb06 nan  chb08 nan  chb12 nan
+  entre pacientes      Topológico H1                chb01 0.73  chb02 0.62  chb03 0.61  chb04 0.67  chb06 0.53  chb08 0.79  chb12 0.45
+  dentro do paciente   Clássico: só forma           chb01 0.92  chb02 0.76  chb03 0.87  chb04 nan  chb06 nan  chb08 nan  chb12 nan
+  entre pacientes      Clássico: só forma           chb01 0.87  chb02 0.86  chb03 0.63  chb04 0.95  chb06 0.60  chb08 0.77  chb12 0.69
+  dentro do paciente   Clássico: forma + amplitude  chb01 0.99  chb02 0.92  chb03 0.99  chb04 nan  chb06 nan  chb08 nan  chb12 nan
+  entre pacientes      Clássico: forma + amplitude  chb01 0.99  chb02 0.97  chb03 0.97  chb04 0.91  chb06 0.41  chb08 0.93  chb12 0.67
+  dentro do paciente   Topológico + clássico        chb01 0.99  chb02 0.90  chb03 0.99  chb04 nan  chb06 nan  chb08 nan  chb12 nan
+  entre pacientes      Topológico + clássico        chb01 0.99  chb02 0.97  chb03 0.98  chb04 0.93  chb06 0.47  chb08 0.95  chb12 0.65
 
            esquema                 descritores paciente  auroc  auprc  prevalencia  fa_h_todas_crises
-dentro do paciente               Topológico H1    chb01   0.79   0.01         0.00              16.72
+dentro do paciente               Topológico H1    chb01   0.74   0.01         0.00              57.43
 dentro do paciente               Topológico H1    chb02   0.58   0.00         0.00             139.15
 dentro do paciente               Topológico H1    chb03   0.56   0.01         0.01             108.41
-   entre pacientes               Topológico H1    chb01   0.73   0.01         0.00              40.06
-   entre pacientes               Topológico H1    chb02   0.62   0.00         0.00             136.12
-   entre pacientes               Topológico H1    chb03   0.58   0.01         0.01              62.48
-dentro do paciente          Clássico: só forma    chb01   0.88   0.08         0.00               3.61
+dentro do paciente               Topológico H1    chb04    NaN    NaN         0.00                NaN
+dentro do paciente               Topológico H1    chb06    NaN    NaN          NaN                NaN
+dentro do paciente               Topológico H1    chb08    NaN    NaN          NaN                NaN
+dentro do paciente               Topológico H1    chb12    NaN    NaN          NaN                NaN
+   entre pacientes               Topológico H1    chb01   0.73   0.01         0.00              82.68
+   entre pacientes               Topológico H1    chb02   0.62   0.00         0.00             169.52
+   entre pacientes               Topológico H1    chb03   0.61   0.01         0.01              49.38
+   entre pacientes               Topológico H1    chb04   0.67   0.00         0.00              16.47
+   entre pacientes               Topológico H1    chb06   0.53   0.01         0.00             145.03
+   entre pacientes               Topológico H1    chb08   0.79   0.17         0.06               8.95
+   entre pacientes               Topológico H1    chb12   0.45   0.06         0.03             136.64
+dentro do paciente          Clássico: só forma    chb01   0.92   0.04         0.00               6.71
 dentro do paciente          Clássico: só forma    chb02   0.76   0.01         0.00              28.19
 dentro do paciente          Clássico: só forma    chb03   0.87   0.10         0.01               2.76
-   entre pacientes          Clássico: só forma    chb01   0.86   0.02         0.00               9.19
-   entre pacientes          Clássico: só forma    chb02   0.82   0.01         0.00              28.51
-   entre pacientes          Clássico: só forma    chb03   0.70   0.02         0.01              51.03
-dentro do paciente Clássico: forma + amplitude    chb01   0.99   0.38         0.00               0.15
+dentro do paciente          Clássico: só forma    chb04    NaN    NaN         0.00                NaN
+dentro do paciente          Clássico: só forma    chb06    NaN    NaN          NaN                NaN
+dentro do paciente          Clássico: só forma    chb08    NaN    NaN          NaN                NaN
+dentro do paciente          Clássico: só forma    chb12    NaN    NaN          NaN                NaN
+   entre pacientes          Clássico: só forma    chb01   0.87   0.01         0.00              20.89
+   entre pacientes          Clássico: só forma    chb02   0.86   0.01         0.00              25.32
+   entre pacientes          Clássico: só forma    chb03   0.63   0.01         0.01              76.00
+   entre pacientes          Clássico: só forma    chb04   0.95   0.02         0.00               0.98
+   entre pacientes          Clássico: só forma    chb06   0.60   0.01         0.00              74.52
+   entre pacientes          Clássico: só forma    chb08   0.77   0.15         0.06               0.00
+   entre pacientes          Clássico: só forma    chb12   0.69   0.12         0.03               7.88
+dentro do paciente Clássico: forma + amplitude    chb01   0.99   0.73         0.00               0.94
 dentro do paciente Clássico: forma + amplitude    chb02   0.92   0.09         0.00               0.53
 dentro do paciente Clássico: forma + amplitude    chb03   0.99   0.56         0.01               1.10
-   entre pacientes Clássico: forma + amplitude    chb01   0.99   0.46         0.00               0.45
-   entre pacientes Clássico: forma + amplitude    chb02   0.98   0.15         0.00               2.50
-   entre pacientes Clássico: forma + amplitude    chb03   0.98   0.47         0.01               0.41
-dentro do paciente       Topológico + clássico    chb01   0.98   0.41         0.00               0.15
+dentro do paciente Clássico: forma + amplitude    chb04    NaN    NaN         0.00                NaN
+dentro do paciente Clássico: forma + amplitude    chb06    NaN    NaN          NaN                NaN
+dentro do paciente Clássico: forma + amplitude    chb08    NaN    NaN          NaN                NaN
+dentro do paciente Clássico: forma + amplitude    chb12    NaN    NaN          NaN                NaN
+   entre pacientes Clássico: forma + amplitude    chb01   0.99   0.53         0.00               1.89
+   entre pacientes Clássico: forma + amplitude    chb02   0.97   0.11         0.00               2.23
+   entre pacientes Clássico: forma + amplitude    chb03   0.97   0.17         0.01               2.76
+   entre pacientes Clássico: forma + amplitude    chb04   0.91   0.01         0.00               1.57
+   entre pacientes Clássico: forma + amplitude    chb06   0.41   0.00         0.00             145.61
+   entre pacientes Clássico: forma + amplitude    chb08   0.93   0.67         0.06               0.00
+   entre pacientes Clássico: forma + amplitude    chb12   0.67   0.12         0.03               3.94
+dentro do paciente       Topológico + clássico    chb01   0.99   0.72         0.00               1.28
 dentro do paciente       Topológico + clássico    chb02   0.90   0.08         0.00               1.12
 dentro do paciente       Topológico + clássico    chb03   0.99   0.73         0.01               0.00
-   entre pacientes       Topológico + clássico    chb01   0.98   0.52         0.00               0.00
-   entre pacientes       Topológico + clássico    chb02   0.98   0.20         0.00               1.38
-   entre pacientes       Topológico + clássico    chb03   0.98   0.63         0.01               0.14
+dentro do paciente       Topológico + clássico    chb04    NaN    NaN         0.00                NaN
+dentro do paciente       Topológico + clássico    chb06    NaN    NaN          NaN                NaN
+dentro do paciente       Topológico + clássico    chb08    NaN    NaN          NaN                NaN
+dentro do paciente       Topológico + clássico    chb12    NaN    NaN          NaN                NaN
+   entre pacientes       Topológico + clássico    chb01   0.99   0.61         0.00               0.69
+   entre pacientes       Topológico + clássico    chb02   0.97   0.17         0.00               1.86
+   entre pacientes       Topológico + clássico    chb03   0.98   0.27         0.01               1.79
+   entre pacientes       Topológico + clássico    chb04   0.93   0.02         0.00               1.30
+   entre pacientes       Topológico + clássico    chb06   0.47   0.00         0.00             145.32
+   entre pacientes       Topológico + clássico    chb08   0.95   0.77         0.06               0.00
+   entre pacientes       Topológico + clássico    chb12   0.65   0.16         0.03               9.20
   figura: 10_auroc_por_paciente.png
   figura: 10_crises_percentis.png
   figura: 10_classificacao_pacientes.png

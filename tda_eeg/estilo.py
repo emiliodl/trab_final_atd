@@ -12,6 +12,12 @@ EIXO = "#c3c2b7"
 AZUL, LARANJA, AGUA = "#2a78d6", "#eb6834", "#1baf7a"
 AMARELO, VIOLETA = "#eda100", "#6250d6"
 
+# a cor e o marcador seguem o paciente em todas as figuras (paleta validada para daltonismo;
+# o nome do paciente aparece sempre escrito, nunca só a cor)
+COR_PACIENTE = {"chb01": AZUL, "chb02": AGUA, "chb03": VIOLETA, "chb04": AMARELO,
+                "chb06": "#e87ba4", "chb08": "#008300", "chb12": "#e34948"}
+MARCA_PACIENTE = {"chb01": "o", "chb02": "s", "chb03": "D", "chb04": "^", "chb06": "v", "chb08": "P", "chb12": "X"}
+
 # a cor segue a classe em todas as figuras
 COR_CLASSE = {
     "interictal": AZUL,

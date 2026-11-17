@@ -1,62 +1,71 @@
 
-[chb01] 7 gravações, 2 crises
-  chb01_01 [FP1-F7] 899 janelas
-  chb01_02 [FP1-F7] 899 janelas
-  chb01_03 [FP1-F7] 899 janelas
-  chb01_04 [FP1-F7] 899 janelas
-  chb01_05 [FP1-F7] 899 janelas
-  chb01_06 [FP1-F7] 899 janelas
-  chb01_09 [FP1-F7] 899 janelas
+[chb01] 42 gravações, 7 crises
 classe
-interictal    5676
-pre-ictal      300
-pos-ictal      297
-ictal           18
-transicao        2
-  110 s
+interictal    34303
+pos-ictal      1042
+pre-ictal       987
+ictal           114
+transicao         8
+  0 s
 
 [chb02] 20 gravações, 3 crises
-  chb02_01 [FP1-F7] 899 janelas
-  chb02_02 [FP1-F7] 899 janelas
-  chb02_03 [FP1-F7] 899 janelas
-  chb02_04 [FP1-F7] 899 janelas
-  chb02_05 [FP1-F7] 899 janelas
-  chb02_06 [FP1-F7] 899 janelas
-  chb02_07 [FP1-F7] 899 janelas
-  chb02_08 [FP1-F7] 899 janelas
-  chb02_09 [FP1-F7] 899 janelas
-  chb02_10 [FP1-F7] 899 janelas
-  chb02_11 [FP1-F7] 899 janelas
-  chb02_12 [FP1-F7] 899 janelas
-  chb02_13 [FP1-F7] 899 janelas
-  chb02_14 [FP1-F7] 899 janelas
-  chb02_15 [FP1-F7] 899 janelas
-  chb02_16 [FP1-F7] 238 janelas
-  chb02_16+ [FP1-F7] 899 janelas
-  chb02_17 [FP1-F7] 899 janelas
-  chb02_18 [FP1-F7] 899 janelas
-  chb02_19 [FP1-F7] 899 janelas
 classe
 interictal    16473
 pre-ictal       447
 pos-ictal       351
 ictal            44
 transicao         4
-  281 s
+  0 s
 
 [chb03] 8 gravações, 4 crises
-  chb03_01 [FP1-F7] 899 janelas
-  chb03_02 [FP1-F7] 899 janelas
-  chb03_03 [FP1-F7] 899 janelas
-  chb03_04 [FP1-F7] 899 janelas
-  chb03_05 [FP1-F7] 899 janelas
-  chb03_06 [FP1-F7] 899 janelas
-  chb03_07 [FP1-F7] 899 janelas
-  chb03_08 [FP1-F7] 899 janelas
 classe
 interictal    5989
 pos-ictal      600
 pre-ictal      536
 ictal           61
 transicao        6
-  114 s
+  0 s
+
+[chb04] 5 gravações, 1 crises
+  chb04_01 [FP1-F7] 3598 janelas
+  chb04_02 [FP1-F7] 3599 janelas
+  chb04_03 [FP1-F7] 3599 janelas
+  chb04_04 [FP1-F7] 3599 janelas
+  chb04_05 [FP1-F7] 2383 janelas
+classe
+interictal    16464
+pre-ictal       150
+pos-ictal       150
+ictal            13
+transicao         1
+  289 s
+
+[chb06] 1 gravações, 3 crises
+  chb06_01 [FP1-F7] 3605 janelas
+classe
+interictal    2690
+pre-ictal      450
+pos-ictal      450
+ictal           12
+transicao        3
+  62 s
+
+[chb08] 1 gravações, 1 crises
+  chb08_02 [FP1-F7] 899 janelas
+classe
+interictal    554
+pre-ictal     150
+pos-ictal     150
+ictal          43
+transicao       2
+  16 s
+
+[chb12] 1 gravações, 2 crises
+  chb12_06 [FP1-F7] 900 janelas
+classe
+interictal    385
+pre-ictal     300
+pos-ictal     188
+ictal          23
+transicao       4
+  16 s

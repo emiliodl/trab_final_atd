@@ -17,10 +17,16 @@ RESUMO = DIR_DADOS / "chb01-summary.txt"
 URL_RAIZ = "https://physionet.org/files/chbmit/1.0.0"
 URL_BASE = f"{URL_RAIZ}/chb01"
 
-# Pacientes usados pelos scripts 01-09 (análise original, um paciente).
+# Pacientes usados pelos scripts 01-09 (estudo de caso, um paciente).
 PACIENTES = ("chb01",)
-# Pacientes da análise multipaciente (script 10); saída em pasta própria.
-PACIENTES_MULTI = ("chb01", "chb02", "chb03")
+# O estudo de caso usa só estas 7 gravações do chb01 (7 h, 2 crises), mesmo que a pasta
+# dataset/ tenha o paciente inteiro. Assim os scripts 01-09 dão sempre o mesmo resultado.
+GRAVACOES_ESTUDO = {
+    "chb01": ("chb01_01", "chb01_02", "chb01_03", "chb01_04", "chb01_05", "chb01_06", "chb01_09"),
+}
+# Pacientes da análise multipaciente (scripts 10-13): todas as gravações de cada um que
+# estiverem em dataset/ e constarem no resumo do paciente. Saída em pasta própria.
+PACIENTES_MULTI = ("chb01", "chb02", "chb03", "chb04", "chb06", "chb08", "chb12")
 DIR_MULTI = DIR_RES / "multipaciente"
 
 # --- Pré-processamento (Fase 2) -------------------------------------------

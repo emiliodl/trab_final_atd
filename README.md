@@ -1,24 +1,63 @@
-# Projeto 5 — EEG e crises epilépticas via Takens (TDA, SME0231/SME5987)
+# A topologia do EEG muda em uma crise epiléptica?
 
-Implementação do Projeto 5 de `projetos_TDA.pdf`: reconstrução de Takens de um canal
-de EEG do CHB-MIT, complexo de Vietoris–Rips por janela e persistência em H1,
-comparada às anotações de crise.
+**Projeto 5 de Análise Topológica de Dados (SME0231/SME5987).** Reconstrução de Takens
+de um canal de EEG, complexo de Vietoris–Rips por janela e homologia persistente em H1,
+aplicados ao banco público CHB-MIT e comparados às anotações de crise.
 
-**Pergunta de pesquisa.** A persistência de H1 da reconstrução de Takens muda
-sistematicamente entre janelas interictais, pré-ictais e ictais, podendo servir de
-descritor para detecção e, de forma exploratória, alerta antecipado?
+## A pergunta e a resposta
 
-**Resposta curta (com estes dados).** Não de forma útil. No canal FP1-F7 a
-persistência máxima de H1 quase não distingue as janelas ictais das interictais
-(AUROC 0,60), e um baseline simples de amplitude separa muito melhor (AUROC 0,84 a
-0,97). Os descritores de H1 acompanham um estado lento do EEG que dura cerca de duas
-horas e contém as duas crises, mas não o intervalo de 10 minutos que antecede cada
-uma. Em sete pacientes e 21 crises, com treino e teste em pacientes diferentes (itens 8
-a 11): sozinha, a topologia de um canal detecta 4 das 21 crises; com 21 canais, 12; o
-baseline clássico de um canal detecta 18, e somado à topologia detecta as 21. Nos
-pacientes novos (chb04, chb06, chb12) nem a amplitude de um canal destaca as crises:
-ali o que resolve é usar vários canais. Detalhes e ressalvas na seção
-[Resultados](#resultados).
+Uma crise epiléptica costuma aparecer no EEG como atividade rítmica. Um sinal rítmico
+vira um laço no espaço de Takens, e laços são o que H1 mede. A pergunta do projeto:
+
+> A persistência de H1 da reconstrução de Takens muda sistematicamente entre janelas
+> interictais (longe da crise), pré-ictais (pouco antes) e ictais (durante a crise),
+> podendo servir de descritor para detecção e, de forma exploratória, alerta antecipado?
+
+**Resposta, com sete pacientes e 21 crises: sozinha, não.** Treinando um classificador
+em seis pacientes e testando no sétimo:
+
+| Descritores | Crises detectadas | No limiar mais rígido |
+|---|---|---|
+| Só topologia (H1), 1 canal | 4 de 21 | 0 de 21 |
+| Só topologia (H1), 21 canais | 12 de 21 | 0 de 21 |
+| Clássico com amplitude, 1 canal | 18 de 21 | 13 de 21 |
+| Topologia + clássico, 1 canal | 21 de 21 | 16 de 21 |
+| Clássico com amplitude, 21 canais | 21 de 21 | 21 de 21 |
+
+- **H1 não destaca nenhuma das 21 crises.** O trecho da crise fica entre os percentis
+  10 e 68 dos trechos interictais do mesmo paciente.
+- **A crise muda o sinal, mas não cria um laço.** A nuvem de Takens de uma janela de
+  crise é um novelo, sem buraco; o que muda é a amplitude, que a padronização de cada
+  janela apaga.
+- **A amplitude de um canal também não é universal.** Ela destaca 15 das 21 crises e
+  falha em três pacientes, nos quais a crise quase não aparece no canal analisado.
+- **Somada ao baseline clássico, a topologia não é redundante.** Ela recupera as três
+  crises que o baseline de um canal perde, e um controle com os descritores
+  embaralhados mostra que o ganho não vem de ter mais colunas.
+- **O que parecia sinal era um estado do cérebro.** A persistência total acompanha um
+  estado de horas, provavelmente o sono, em que caem as 7 crises do paciente chb01.
+- **Não há evidência de antecipação**: a classe pré-ictal não se transfere entre pacientes.
+
+**Expectativa × realidade.** Em cima, o que a hipótese previa; embaixo, o EEG real
+durante uma crise.
+
+![expectativa e realidade](resultados/didaticas/D2_expectativa_realidade.png)
+
+**As 21 crises, uma por linha.** Quão incomum é o trecho da crise entre trechos
+interictais do mesmo paciente: bolinhas azuis para a topologia, losangos laranja para
+a amplitude.
+
+![todas as crises](resultados/didaticas/D4_todas_as_crises.png)
+
+**Treino e teste em pacientes diferentes.** Cada bolinha é uma crise; cheia quer dizer
+detectada.
+
+![crises detectadas](resultados/didaticas/D5_crises_detectadas.png)
+
+O trabalho tem duas partes. O **estudo de caso** (itens 1 a 7 dos resultados) examina a
+fundo 7 horas de um paciente, com 2 crises, e é o que o enunciado pede. A **análise com
+sete pacientes** (itens 8 a 11) repete o pipeline em 92 horas e 21 crises, com treino e
+teste em pacientes diferentes. Detalhes e ressalvas na seção [Resultados](#resultados).
 
 > O enunciado foi atualizado depois do `projetos_TDA.pdf` guardado aqui: a versão nova
 > traz uma seção "Definição supervisionada: amostras, rótulos e output". O item 9 dos
@@ -51,8 +90,8 @@ Cada etapa também roda sozinha: `python scripts/04_analise_temporal.py`. Os scr
 
 ## Dados
 
-Pasta `dataset/`: 7 gravações de 1 h do paciente chb01 (256 Hz), com 2 crises
-anotadas em `chb01-summary.txt`.
+**Estudo de caso.** 7 gravações de 1 h do paciente chb01 (256 Hz), com 2 crises
+anotadas em `dataset/chb01-summary.txt`.
 
 | Gravação | Início | Crise (s no arquivo) |
 |---|---|---|
@@ -64,12 +103,7 @@ anotadas em `chb01-summary.txt`.
 | chb01_06 | 16:43:26 | — |
 | chb01_09 | 19:43:56 | — |
 
-A análise multipaciente (itens 8 a 11 dos resultados) usa sete pacientes, com os
-mesmos parâmetros: o chb01 inteiro (42 gravações, 7 crises), o chb02 (01–19, 3 crises),
-o chb03 (01–08, 4 crises), o chb04 (01–05, 1 crise) e uma gravação de cada um de chb06
-(3 crises), chb08 (1 crise) e chb12 (2 crises). São 92 h de EEG e 21 crises.
-
-Janelas de 8 s com passo de 4 s: 6 293 no total (chb01).
+Janelas de 8 s com passo de 4 s: 6 293 no estudo de caso.
 
 | Classe | Definição | Janelas |
 |---|---|---|
@@ -78,6 +112,19 @@ Janelas de 8 s com passo de 4 s: 6 293 no total (chb01).
 | interictal | todo o resto | 5 676 |
 | pós-ictal (excluída) | começa nos 600 s após o fim da crise | 297 |
 | transição (excluída) | sobreposição parcial (< 50 %) com a crise | 2 |
+
+**Sete pacientes.** Mesmos parâmetros e mesmos rótulos, em 92 h de EEG com 21 crises
+(83 147 janelas, 310 delas ictais):
+
+| Paciente | Gravações | Horas | Crises |
+|---|---|---|---|
+| chb01 | todas as 42 | 40,5 | 7 |
+| chb02 | 01–19 (com 16 e 16+) | 19,2 | 3 |
+| chb03 | 01–08 | 8,0 | 4 |
+| chb04 | 01–05 | 18,6 | 1 |
+| chb06 | 01 | 4,0 | 3 |
+| chb08 | 02 | 1,0 | 1 |
+| chb12 | 06 | 1,0 | 2 |
 
 ## Do enunciado ao código
 
@@ -93,7 +140,7 @@ Janelas de 8 s com passo de 4 s: 6 293 no total (chb01).
 | Avançado: previsão | `scripts/06` | Horizonte pré-ictal, exclusão, alarmes falsos por hora e avaliação definidos formalmente |
 | Avançado: Mapper | `scripts/07` | Kepler Mapper com lente topológica e com lente de tempo relativo à crise |
 | Boas práticas | `scripts/01`, `08`, `executar_tudo.py` | Validação sintética, sensibilidade a canal e (d, τ), sementes fixas, `pip freeze` |
-| "Diferentes janelas e pacientes" | `scripts/10`, `11` | Mesmo pipeline em chb01, chb02 e chb03; uma linha do tempo por paciente |
+| "Diferentes janelas e pacientes" | `scripts/10`, `11` | Mesmo pipeline em sete pacientes; uma linha do tempo por paciente |
 | Figuras para a apresentação | `scripts/13` | Seis figuras didáticas, com a leitura escrita na própria figura |
 | Além do enunciado: vários canais | `scripts/14` | O mesmo pipeline nos 21 canais, com os descritores juntos no modelo |
 | Supervisionada: unidade amostral | `tda_eeg/dados.py`, `scripts/12` | Uma janela = paciente, arquivo, canal e intervalo absoluto |
@@ -103,7 +150,10 @@ Janelas de 8 s com passo de 4 s: 6 293 no total (chb01).
 
 ## Resultados
 
-Todas as figuras estão em `resultados/figuras/`, as tabelas em `resultados/tabelas/`.
+Os itens 1 a 7 são o **estudo de caso** (7 h do chb01, 2 crises); figuras em
+`resultados/figuras/` e tabelas em `resultados/tabelas/`. Os itens 8 a 11 são a
+**análise com sete pacientes**; figuras e tabelas em `resultados/multipaciente/` e
+`resultados/didaticas/`.
 
 ### 1. O pipeline funciona em sinais com resposta conhecida
 

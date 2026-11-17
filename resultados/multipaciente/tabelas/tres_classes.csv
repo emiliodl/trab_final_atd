@@ -1,0 +1,10 @@
+descritores,paciente_teste,acuracia_balanceada,auroc_interictal_vs_resto,n_interictal,auroc_pre-ictal_vs_resto,n_pre-ictal,auroc_ictal_vs_resto,n_ictal
+Topológico H1,chb01,0.2788,0.2268,3973,0.1434,297,0.8071,14
+Topológico H1,chb02,0.3582,0.3939,13599,0.5351,442,0.5838,38
+Topológico H1,chb03,0.3157,0.3419,3044,0.683,531,0.4763,53
+Clássico: forma + amplitude,chb01,0.4902,0.2094,3973,0.17,297,0.9976,14
+Clássico: forma + amplitude,chb02,0.5313,0.5154,13599,0.358,442,0.9825,38
+Clássico: forma + amplitude,chb03,0.5938,0.5028,3044,0.4073,531,0.9903,53
+Topológico + clássico,chb01,0.4983,0.2211,3973,0.1699,297,0.9988,14
+Topológico + clássico,chb02,0.5461,0.4268,13599,0.3241,442,0.9896,38
+Topológico + clássico,chb03,0.5668,0.4788,3044,0.4149,531,0.996,53

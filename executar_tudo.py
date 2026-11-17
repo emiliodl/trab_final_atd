@@ -1,7 +1,8 @@
 """Executa o projeto inteiro, na ordem. Uso: python executar_tudo.py
 
-Tempo aproximado em uma máquina de 32 núcleos: 10 a 15 minutos (a extração com o
-GUDHI, script 03, é a etapa mais demorada).
+Tempo aproximado em uma máquina de 32 núcleos: 20 a 25 minutos (as extrações com o
+GUDHI, scripts 03 e 10, são as etapas mais demoradas). As etapas 10-12 (multipaciente)
+precisam dos EDF de chb02 e chb03; use --so-chb01 para rodar só a análise original.
 """
 import subprocess
 import sys
@@ -20,13 +21,19 @@ ETAPAS = [
     "08_sensibilidade.py",
     "09_animacoes.py",
 ]
+ETAPAS_MULTI = [
+    "10_multipaciente_extrair.py",
+    "11_multipaciente_analise.py",
+    "12_avaliacao_supervisionada.py",
+]
 
 
 def main():
     registro = RAIZ / "resultados" / "registro_execucao.txt"
     registro.parent.mkdir(parents=True, exist_ok=True)
     with registro.open("w", encoding="utf-8") as log:
-        for etapa in ETAPAS:
+        etapas = ETAPAS if "--so-chb01" in sys.argv else ETAPAS + ETAPAS_MULTI
+        for etapa in etapas:
             t0 = time.time()
             print(f"\n=== {etapa} ===", flush=True)
             r = subprocess.run([sys.executable, str(RAIZ / "scripts" / etapa)], cwd=RAIZ,

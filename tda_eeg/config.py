@@ -14,7 +14,14 @@ DIR_TAB = DIR_RES / "tabelas"
 DIR_CACHE = DIR_RES / "cache"
 
 RESUMO = DIR_DADOS / "chb01-summary.txt"
-URL_BASE = "https://physionet.org/files/chbmit/1.0.0/chb01"
+URL_RAIZ = "https://physionet.org/files/chbmit/1.0.0"
+URL_BASE = f"{URL_RAIZ}/chb01"
+
+# Pacientes usados pelos scripts 01-09 (análise original, um paciente).
+PACIENTES = ("chb01",)
+# Pacientes da análise multipaciente (script 10); saída em pasta própria.
+PACIENTES_MULTI = ("chb01", "chb02", "chb03")
+DIR_MULTI = DIR_RES / "multipaciente"
 
 # --- Pré-processamento (Fase 2) -------------------------------------------
 CANAL = "FP1-F7"          # canal do enunciado

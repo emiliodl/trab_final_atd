@@ -9,3 +9,6 @@ __pycache__/
 .venv/
 .vscode/
 .claude/
+
+# Cópias de segurança feitas antes de atualizar slides e notebook
+*_ANTES.*

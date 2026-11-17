@@ -1,0 +1,16 @@
+{
+  "pacientes": [
+    "chb01",
+    "chb02",
+    "chb03"
+  ],
+  "canal": "FP1-F7",
+  "d": 3,
+  "tau": 4,
+  "janela_s": 8.0,
+  "passo_s": 4.0,
+  "horizonte_pre_s": 600.0,
+  "exclusao_pos_s": 600.0,
+  "fracao_ictal": 0.5,
+  "modelo": "regressao logistica, C=1, class_weight=balanced (hiperparametros fixos)"
+}

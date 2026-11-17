@@ -5,6 +5,7 @@ import re
 import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import quote
 
 import mne
 import numpy as np
@@ -18,9 +19,10 @@ from . import config as cfg
 class Gravacao:
     nome: str                      # ex.: "chb01_03"
     caminho: Path
-    inicio_abs: float              # início em s, relativo à 1ª gravação usada
+    inicio_abs: float              # início em s, relativo à 1ª gravação DO PACIENTE
     duracao: float                 # duração em s
     crises: list = field(default_factory=list)   # [(ini, fim)] em s no arquivo
+    paciente: str = ""             # ex.: "chb01"
 
     @property
     def crises_abs(self):
@@ -48,12 +50,14 @@ def ler_resumo(caminho=cfg.RESUMO):
 
 
 def baixar_edf(nome_edf, destino=cfg.DIR_DADOS):
-    """Baixa um EDF do PhysioNet caso ele não esteja na pasta local."""
+    """Baixa um arquivo do CHB-MIT (EDF ou resumo) caso ele não esteja na pasta local."""
     destino = Path(destino)
     destino.mkdir(parents=True, exist_ok=True)
     caminho = destino / nome_edf
     if not caminho.exists():
-        with requests.get(f"{cfg.URL_BASE}/{nome_edf}", stream=True, timeout=180) as r:
+        # a pasta do paciente vem do nome (chb02_16+.edf -> chb02); o "+" precisa ser escapado
+        url = f"{cfg.URL_RAIZ}/{nome_edf[:5]}/{quote(nome_edf)}"
+        with requests.get(url, stream=True, timeout=180) as r:
             r.raise_for_status()
             with caminho.open("wb") as f:
                 for bloco in r.iter_content(chunk_size=1024 * 1024):
@@ -69,27 +73,35 @@ def _abrir(caminho):
         return mne.io.read_raw_edf(caminho, preload=False, verbose=False)
 
 
-def listar_gravacoes(pasta=cfg.DIR_DADOS):
-    """Gravações .edf presentes na pasta, em ordem cronológica, com as crises."""
-    crises = ler_resumo()
-    brutas = []
-    for caminho in sorted(Path(pasta).glob("*.edf")):
-        raw = _abrir(caminho)
-        brutas.append((caminho, raw.info["meas_date"], raw.n_times / raw.info["sfreq"]))
-    if not brutas:
-        raise FileNotFoundError(f"Nenhum .edf encontrado em {pasta}")
-    brutas.sort(key=lambda t: t[1])
-    t0 = brutas[0][1]
-    return [
-        Gravacao(
-            nome=caminho.stem,
-            caminho=caminho,
-            inicio_abs=(data - t0).total_seconds(),
-            duracao=dur,
-            crises=crises.get(caminho.name, []),
-        )
-        for caminho, data, dur in brutas
-    ]
+def listar_gravacoes(pasta=cfg.DIR_DADOS, pacientes=cfg.PACIENTES):
+    """Gravações .edf dos `pacientes`, em ordem cronológica, com as crises.
+
+    Cada paciente tem a própria linha do tempo (inicio_abs relativo à primeira
+    gravação dele) e as crises vêm do respectivo chbXX-summary.txt.
+    """
+    saida = []
+    for pac in pacientes:
+        crises = ler_resumo(Path(pasta) / f"{pac}-summary.txt")
+        brutas = []
+        for caminho in sorted(Path(pasta).glob(f"{pac}_*.edf")):
+            raw = _abrir(caminho)
+            brutas.append((caminho, raw.info["meas_date"], raw.n_times / raw.info["sfreq"]))
+        if not brutas:
+            raise FileNotFoundError(f"Nenhum .edf de {pac} encontrado em {pasta}")
+        brutas.sort(key=lambda t: t[1])
+        t0 = brutas[0][1]
+        saida += [
+            Gravacao(
+                nome=caminho.stem,
+                caminho=caminho,
+                inicio_abs=(data - t0).total_seconds(),
+                duracao=dur,
+                crises=crises.get(caminho.name, []),
+                paciente=pac,
+            )
+            for caminho, data, dur in brutas
+        ]
+    return saida
 
 
 def carregar_canais(caminho, canais=(cfg.CANAL,), fs=cfg.FS, banda=cfg.BANDA):
@@ -130,13 +142,18 @@ def nomes_canais(caminho):
 
 def tabela_janelas(gravacoes, janela_s=cfg.JANELA_S, passo_s=cfg.PASSO_S):
     """Uma linha por janela de todas as gravações, com tempos locais e absolutos."""
-    linhas = []
-    for g in gravacoes:
-        inicios = np.arange(0.0, g.duracao - janela_s + 1e-9, passo_s)
-        for t in inicios:
-            linhas.append((g.nome, t, t + janela_s, t + g.inicio_abs))
-    df = pd.DataFrame(linhas, columns=["gravacao", "t_ini", "t_fim", "t_abs"])
-    return rotular(df, gravacoes, janela_s)
+    partes = []
+    # rótulos por paciente: as linhas do tempo de pacientes diferentes não se misturam
+    for pac in dict.fromkeys(g.paciente for g in gravacoes):
+        gs = [g for g in gravacoes if g.paciente == pac]
+        linhas = []
+        for g in gs:
+            inicios = np.arange(0.0, g.duracao - janela_s + 1e-9, passo_s)
+            for t in inicios:
+                linhas.append((g.nome, t, t + janela_s, t + g.inicio_abs))
+        df = pd.DataFrame(linhas, columns=["gravacao", "t_ini", "t_fim", "t_abs"])
+        partes.append(rotular(df, gs, janela_s))
+    return pd.concat(partes, ignore_index=True)
 
 
 def rotular(df, gravacoes, janela_s=cfg.JANELA_S,

@@ -1,10 +1,12 @@
 """Validação respeitando a dependência temporal: deixa-uma-gravação-fora.
 
-Há um único paciente (chb01), então não é possível dividir treino/teste por
-paciente como o enunciado recomenda para medir generalização entre indivíduos.
-A unidade de dependência disponível é a GRAVAÇÃO (1 h contínua): todas as janelas
-de uma gravação ficam juntas no treino ou no teste. Isso mede generalização para
-outras horas e outra crise do MESMO paciente, não para pacientes novos.
+Usada na análise original (scripts 05 e 06), que tem um único paciente (chb01). A
+unidade de dependência é a GRAVAÇÃO (1 h contínua): todas as janelas de uma gravação
+ficam juntas no treino ou no teste. Isso mede generalização para outras horas e
+outra crise do MESMO paciente, não para pacientes novos.
+
+A divisão por PACIENTE e a divisão cronológica, pedidas no enunciado (Seção 6.4),
+estão na análise multipaciente: scripts 11 e 12.
 
 Os hiperparâmetros dos modelos são fixos (não há busca), logo nada é ajustado
 olhando o conjunto de teste.

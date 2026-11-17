@@ -1,0 +1,12 @@
+{
+  "ictal": "janela totalmente contida na crise anotada",
+  "interictal": "janela a pelo menos 3600 s de qualquer crise",
+  "pre_ictal": "janela contida em [ts - 600 s, ts - 0 s)",
+  "excluidas": "todas as demais (cruzam início/fim, pós-ictal, interictal próximo)",
+  "limiares": [
+    "quantil 0.99 do escore dos negativos de treino",
+    "quantil 0.999 do escore dos negativos de treino"
+  ],
+  "cronologica": "treino até a gravação da crise floor(n/2); teste nas gravações posteriores",
+  "modelo": "regressão logística, C=1, class_weight=balanced"
+}

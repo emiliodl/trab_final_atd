@@ -21,6 +21,12 @@ pacientes diferentes (itens 8 e 9). Detalhes e ressalvas na seção
 > traz uma seção "Definição supervisionada: amostras, rótulos e output". O item 9 dos
 > resultados segue essa versão.
 
+## Material de apresentação
+
+- `projeto5_tda_eeg_colab.ipynb`: o projeto inteiro em um notebook comentado, com as saídas salvas
+  (roda no Google Colab; a Seção 11 cobre os três pacientes e a definição supervisionada).
+- `apresentacao_projeto5_tda.pptx`: slides, com notas do apresentador.
+
 ## Como executar
 
 ```
